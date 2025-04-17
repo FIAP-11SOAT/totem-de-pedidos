@@ -10,13 +10,13 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app ./service/cmd/worker
 
 # Test
 FROM golang:${GO_VERSION}-alpine AS tests
-ENV CI "1"
+ENV CI=1
 WORKDIR /service
 COPY ./go.mod ./go.sum ./
 RUN go mod download
 COPY ./ ./
 RUN go clean -testcache
-CMD go test -v ./test/unittests/...
+RUN go test -v ./test/unittests/...
 
 
 # Image
