@@ -1,3 +1,5 @@
 package ports
 
-// interface que chama o mercado pago
+type MercadoPagoInterface interface {
+	Call() error
+}
