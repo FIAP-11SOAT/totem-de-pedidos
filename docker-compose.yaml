@@ -12,8 +12,11 @@ services:
       - "8080:8080"
     environment:
       - POSTGRES_URL=postgresql://totempedidos:totempedidos@db:5432/totempedidos
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
-      - app-network
+      - totempedidos-network
 
   db:
     container_name: totem-pedidos-db
@@ -23,14 +26,17 @@ services:
       - POSTGRES_PASSWORD=totempedidos
       - POSTGRES_DB=totempedidos
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - totempedidos_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U totempedidos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5    
     networks:
-      - app-network
+      - totempedidos-network
 
 volumes:
-  db_data:
-    driver: local
+  totempedidos_data:
 
 networks:
-  app-network:
-    driver: bridge
+  totempedidos-network:

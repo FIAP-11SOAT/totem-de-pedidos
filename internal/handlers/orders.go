@@ -8,19 +8,18 @@ import (
 )
 
 type OrderHandler struct {
-	Repository ports.DatabaseRepository
-	Usecase    ports.UsecaseInterface
+	Usecase ports.UsecaseInterface
 }
 
-func NewOrderRouter(repository ports.DatabaseRepository, usecase ports.UsecaseInterface) *OrderHandler {
-	return &OrderHandler{Repository: repository, Usecase: usecase}
+func NewOrderRouter() *OrderHandler {
+	return &OrderHandler{}
 }
 
 func (o *OrderHandler) CreateOrder(c echo.Context) error {
 
-	// instancia um domain
-
-	o.Usecase.CreateOrder()
+	if err := o.Usecase.CreateOrder(); err != nil {
+		return c.String(http.StatusInternalServerError, "Error creating order")
+	}
 
 	return c.String(http.StatusOK, "Hello, World!")
 }
