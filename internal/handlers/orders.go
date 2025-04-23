@@ -18,8 +18,10 @@ func NewOrderRouter(repository ports.DatabaseRepository, usecase ports.UsecaseIn
 
 func (o *OrderHandler) CreateOrder(c echo.Context) error {
 
-	// instancia um domain
-
+	// DTO create order
+	// bind
+	// valida
+ 
 	o.Usecase.CreateOrder()
 
 	return c.String(http.StatusOK, "Hello, World!")
