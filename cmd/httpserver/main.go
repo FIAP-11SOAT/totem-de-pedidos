@@ -17,7 +17,7 @@ func main() {
 	// domain order
 	orderDomain := domain.New()
 
-	orderHandler := api.NewOrderHandler(postgres, orderDomain)
+	orderHandler := api.NewOrderRouter(postgres, orderDomain)
 	orderHandler.OrderRouters(e)
 
 	e.Logger.Fatal(e.Start(":1323"))

@@ -7,16 +7,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type OrderHandler struct {
+type OrderRouter struct {
 	Repository ports.DatabaseRepository
 	Usecase    ports.UsecaseInterface
 }
 
-func NewOrderHandler(repository ports.DatabaseRepository, usecase ports.UsecaseInterface) *OrderHandler {
-	return &OrderHandler{Repository: repository, Usecase: usecase}
+func NewOrderRouter(repository ports.DatabaseRepository, usecase ports.UsecaseInterface) *OrderRouter {
+	return &OrderRouter{Repository: repository, Usecase: usecase}
 }
 
-func (o *OrderHandler) OrderRouters(e *echo.Echo) {
-	e.GET("/", handlers.CreateOrder)
-	e.GET("/", handlers.CreateOrder)
+func (o *OrderRouter) OrderRouters(e *echo.Echo) {
+	orderHandler := handlers.NewOrderRouter(o.Repository, o.Usecase)
+
+	e.GET("/", orderHandler.CreateOrder)
 }
