@@ -15,9 +15,6 @@ update:
 	go mod tidy
 
 # Golang Clean Cache
-clean: clean-go-cache clean-test-cache
-	rm -rf ./bin
-
 clean-go-cache:
 	go clean -cache
 
@@ -45,7 +42,7 @@ compose-down:
 	docker compose down
 
 compose-up-db:
-	docker compose up -d db 
+	docker compose up -d db
 
 compose-down-db:
 	docker compose down db
