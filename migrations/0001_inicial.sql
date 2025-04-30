@@ -15,6 +15,7 @@ create table
     if not exists "orders" (
         id serial primary key,
         order_date timestamp default current_timestamp,
+        notification_attempts int not null,
         status varchar(50) not null,
         total_amount numeric(10, 2) not null,
         created_at timestamp default current_timestamp,
