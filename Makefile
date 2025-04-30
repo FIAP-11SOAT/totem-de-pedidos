@@ -6,14 +6,15 @@ code-quality:
 	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run ./...
 	go run github.com/securego/gosec/v2/cmd/gosec@latest ./...
 
+# Golang Start
+start:
+	go run cmd/server/main.go
+
 # Golang Update Dependencies
 update:
 	go mod tidy
 
 # Golang Clean Cache
-clean: clean-go-cache clean-test-cache
-	rm -rf ./bin
-
 clean-go-cache:
 	go clean -cache
 
@@ -41,13 +42,7 @@ compose-down:
 	docker compose down
 
 compose-up-db:
-	docker compose up -d db 
+	docker compose up -d db
 
 compose-down-db:
 	docker compose down db
-
-compose-dirs:
-	sudo rm -rf ./setup/.docker
-	mkdir -p ./setup/.docker/postgresql
-	sudo chown -R 1001:1001 ./setup/.docker
-	sudo chmod -R 775 ./setup/.docker

@@ -1,6 +1,5 @@
 package services
 
-// interface que chama o mercado pago
 type MercadoPago struct {
 }
 

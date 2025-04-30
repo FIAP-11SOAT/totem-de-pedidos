@@ -12,25 +12,49 @@ services:
       - "8080:8080"
     environment:
       - POSTGRES_URL=postgresql://totempedidos:totempedidos@db:5432/totempedidos
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
-      - app-network
+      - totempedidos-network
 
   db:
     container_name: totem-pedidos-db
     image: postgres:latest
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_USER=totempedidos
       - POSTGRES_PASSWORD=totempedidos
       - POSTGRES_DB=totempedidos
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - totempedidos_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U totempedidos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5    
     networks:
-      - app-network
+      - totempedidos-network
+
+  migration:
+    container_name: totem-pedidos-migration
+    image: postgres:latest
+    command: >
+      bash -c "
+        sleep 5 &&
+        PGPASSWORD=totempedidos psql -h db -U totempedidos -d totempedidos -f /migrations/0001_inicial.sql &&
+        echo 'Migrations executed successfully'"
+    volumes:
+      - ./migrations:/migrations
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - totempedidos-network
 
 volumes:
-  db_data:
-    driver: local
+  totempedidos_data:
 
 networks:
-  app-network:
-    driver: bridge
+  totempedidos-network:
