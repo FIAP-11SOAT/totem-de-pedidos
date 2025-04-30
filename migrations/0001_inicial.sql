@@ -14,12 +14,12 @@ create table
 create table
     if not exists "orders" (
         id serial primary key,
-        id_c order_date timestamp default current_timestamp,
+        order_date timestamp default current_timestamp,
         status varchar(50) not null,
         total_amount numeric(10, 2) not null,
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp,
-        customer_id integer references customers (id) on delete cascade
+        customer_id integer references custumers (id) on delete cascade
     );
 
 create table
