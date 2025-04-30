@@ -47,11 +47,6 @@ create table
 
 create table
     if not exists "order_items" (
-        id serial primary key,
-        quantity integer not null,
-        price numeric(10, 2) not null,
-        created_at timestamp default current_timestamp,
-        updated_at timestamp default current_timestamp,
         order_id integer references orders (id) on delete cascade,
         product_id integer references products (id) on delete cascade
     );
