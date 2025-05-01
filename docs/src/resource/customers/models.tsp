@@ -1,0 +1,5 @@
+model Customer {
+    id: string;
+    name: string;
+    email: string;
+}

@@ -6,7 +6,7 @@ WORKDIR /service
 COPY ./go.mod ./go.sum ./
 RUN go mod download
 COPY ./ ./
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app ./service/cmd/worker
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app ./cmd/server
 
 # Test
 FROM golang:${GO_VERSION}-alpine AS tests
@@ -16,11 +16,20 @@ COPY ./go.mod ./go.sum ./
 RUN go mod download
 COPY ./ ./
 RUN go clean -testcache
-RUN go test -v ./test/unittests/...
+RUN go test -v ./...
 
+# Docs Build
+FROM node:22-slim AS docs
+WORKDIR /docs
+COPY ./docs/package.json ./docs/package-lock.json ./
+RUN npm install
+COPY ./docs/ ./
+RUN npm run compile
 
 # Image
-FROM gcr.io/distroless/static-debian12 AS production
+FROM debian:12-slim AS production
+WORKDIR /service
 USER nonroot:nonroot
-COPY --from=build --chown=nonroot:nonroot /app /app
-ENTRYPOINT ["/app"]
+COPY --from=docs /docs/schema ./docs
+COPY --from=build --chown=nonroot:nonroot /app ./app
+ENTRYPOINT ["/service/app"]
