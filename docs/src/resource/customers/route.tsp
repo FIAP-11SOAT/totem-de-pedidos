@@ -4,6 +4,7 @@ import "@typespec/openapi";
 import "./models.tsp";
 
 using TypeSpec.Http;
+using TypeSpec.OpenAPI;
 
 namespace main.customers;
 
@@ -11,14 +12,20 @@ namespace main.customers;
 @tag("Customers")
 interface Customers {
     
-    @get()
     @summary("Get all customers")
     @doc("Get all customers")
-    getCustomers(): Customer[];
+    @get getCustomers(): Customer[];
 
-    @post()
     @summary("Create a new customer")
     @doc("Create a new customer")
-    createCustomer(customer: Customer): Customer;
+    @post createCustomer(customer: Customer): Customer;
     
+    @summary("Get a customer by ID")
+    @doc("Get a customer by ID")
+    @get getCustomer(@path id: string): Customer;
+
+    @summary("Delete a customer")
+    @doc("Delete a customer")
+    @delete deleteCustomer(@path id: string): void;
+
 }

@@ -27,9 +27,9 @@ COPY ./docs/ ./
 RUN npm run compile
 
 # Image
-FROM debian:12-slim AS production
+FROM gcr.io/distroless/static-debian12 AS production
 WORKDIR /service
 USER nonroot:nonroot
-COPY --from=docs /docs/schema ./docs
+COPY --from=docs /docs/schema ./docs/schema
 COPY --from=build --chown=nonroot:nonroot /app ./app
 ENTRYPOINT ["/service/app"]

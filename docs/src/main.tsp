@@ -9,6 +9,7 @@ using TypeSpec.OpenAPI;
 
 @service()
 @info(Info)
+@doc(DescMain)
 namespace main;
 
 

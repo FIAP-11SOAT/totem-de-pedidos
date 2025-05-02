@@ -55,3 +55,6 @@ docs-install-depends:
 
 docs-compile-watch:
 	cd docs && npm run watch
+
+docs-preview:
+	cd docs && npm run preview
