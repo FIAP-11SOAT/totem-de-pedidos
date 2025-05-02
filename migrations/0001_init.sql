@@ -20,7 +20,7 @@ create table
         total_amount numeric(10, 2) not null,
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp,
-        customer_id integer references custumers (id) on delete cascade
+        customer_id integer references customers (id) on delete cascade
     );
 
 create table
