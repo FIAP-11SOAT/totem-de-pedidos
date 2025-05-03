@@ -1,26 +1,17 @@
-ARG GO_VERSION=1.24
+FROM golang:1.24 AS base
 
-# Build
-FROM golang:${GO_VERSION}-alpine AS build
-WORKDIR /service
-COPY ./go.mod ./go.sum ./
-RUN go mod download
-COPY ./ ./
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app ./service/cmd/worker
+WORKDIR /app
 
-# Test
-FROM golang:${GO_VERSION}-alpine AS tests
-ENV CI=1
-WORKDIR /service
-COPY ./go.mod ./go.sum ./
-RUN go mod download
-COPY ./ ./
-RUN go clean -testcache
-RUN go test -v ./test/unittests/...
+COPY . .
 
+RUN go mod tidy
 
-# Image
-FROM gcr.io/distroless/static-debian12 AS production
-USER nonroot:nonroot
-COPY --from=build --chown=nonroot:nonroot /app /app
-ENTRYPOINT ["/app"]
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o totempedidos ./cmd/server/.
+
+FROM alpine
+
+WORKDIR /app
+
+COPY --from=base /app/totempedidos .
+
+CMD ["/app/totempedidos"]

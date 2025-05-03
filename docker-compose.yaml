@@ -6,12 +6,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
     pull_policy: build
     ports:
       - "8080:8080"
     environment:
-      - POSTGRES_URL=postgresql://totempedidos:totempedidos@db:5432/totempedidos
+      - DB_DRIVER=postgres
+      - DB_USER=totempedidos
+      - DB_PASS=totempedidos
+      - DB_HOST=db:5432
+      - DB_NAME=totempedidos
+      - DB_OPTIONS=?sslmode=disable
+      - SERVER_PORT=8080
     depends_on:
       db:
         condition: service_healthy
@@ -20,17 +25,15 @@ services:
 
   db:
     container_name: totem-pedidos-db
-    image: postgres:latest
+    image: postgres:16-alpine
     ports:
       - "5432:5432"
     environment:
       - POSTGRES_USER=totempedidos
       - POSTGRES_PASSWORD=totempedidos
       - POSTGRES_DB=totempedidos
-    volumes:
-      - totempedidos_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U totempedidos"]
+      test: ["CMD-SHELL", "pg_isready -d totempedidos -U totempedidos"]
       interval: 10s
       timeout: 5s
       retries: 5    
@@ -39,11 +42,11 @@ services:
 
   migration:
     container_name: totem-pedidos-migration
-    image: postgres:latest
+    image: postgres:16-alpine
     command: >
       bash -c "
         sleep 5 &&
-        PGPASSWORD=totempedidos psql -h db -U totempedidos -d totempedidos -f /migrations/0001_inicial.sql &&
+        PGPASSWORD=totempedidos psql -h db -U totempedidos -d totempedidos -f /migrations/0001_init.sql &&
         echo 'Migrations executed successfully'"
     volumes:
       - ./migrations:/migrations
@@ -52,9 +55,6 @@ services:
         condition: service_healthy
     networks:
       - totempedidos-network
-
-volumes:
-  totempedidos_data:
 
 networks:
   totempedidos-network:
