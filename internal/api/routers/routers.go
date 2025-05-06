@@ -10,6 +10,7 @@ type Routes struct {
 	echoEngine *echo.Echo
 }
 
+// New cria uma nova instância de Routes utilizando o engine Echo fornecido.
 func New(echoEngine *echo.Echo) *Routes {
 	return &Routes{
 		echoEngine: echoEngine,

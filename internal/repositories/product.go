@@ -11,6 +11,7 @@ type productRepository struct {
 	sqlClient *pgx.Conn
 }
 
+// NewProductRepository cria uma nova instância de productRepository utilizando o adaptador de banco de dados fornecido.
 func NewProductRepository(database *dbadapter.DatabaseAdapter) repositories.Product {
 	return &productRepository{
 		sqlClient: database.Client(),

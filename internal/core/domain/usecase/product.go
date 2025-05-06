@@ -10,6 +10,7 @@ type Product struct {
 	productRepository repositories.Product
 }
 
+// NewProductUseCase cria uma nova instância do caso de uso de produto com o repositório fornecido.
 func NewProductUseCase(repository repositories.Product) usecase.Product {
 	return &Product{productRepository: repository}
 }

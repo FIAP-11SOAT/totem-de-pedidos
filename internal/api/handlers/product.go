@@ -14,6 +14,7 @@ type ProductHandler struct {
 	productService usecase.Product
 }
 
+// NewProductHandler cria e retorna um novo ProductHandler utilizando a conexão com o banco de dados fornecida.
 func NewProductHandler(dbConnection *dbadapter.DatabaseAdapter) *ProductHandler {
 	productRepository := repositories.NewProductRepository(dbConnection)
 

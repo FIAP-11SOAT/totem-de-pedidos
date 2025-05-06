@@ -10,6 +10,7 @@ type Customer struct {
 	CustomerRepository repositories.Customer
 }
 
+// NewCustomerUseCase cria uma nova instância do caso de uso de cliente com o repositório fornecido.
 func NewCustomerUseCase(repository repositories.Customer) usecase.Customer {
 	return &Customer{CustomerRepository: repository}
 }
