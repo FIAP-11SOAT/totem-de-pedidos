@@ -16,13 +16,13 @@ interface Customers {
     @doc("Get all customers")
     @get getCustomers(): Customer[];
 
-    @summary("Create a new customer")
-    @doc("Create a new customer")
-    @post createCustomer(customer: Customer): Customer;
-    
     @summary("Get a customer by ID")
     @doc("Get a customer by ID")
     @get getCustomer(@path id: string): Customer;
+
+    @summary("Create a new customer")
+    @doc("Create a new customer")
+    @post createCustomer(customer: Customer): Customer;
 
     @summary("Delete a customer")
     @doc("Delete a customer")

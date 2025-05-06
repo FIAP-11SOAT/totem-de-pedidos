@@ -7,7 +7,7 @@ alias Info = {
     title: "Totem de Pedidos",
     version: "1.0.0",
     contact: {
-        name: "Melhorzin Key Haven",
+        name: "Totem de Pedidos",
         url: "https://totem.mfavl-soat11.software",
     },
     "x-logo": {
