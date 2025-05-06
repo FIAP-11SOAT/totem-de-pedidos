@@ -23,5 +23,11 @@ func NewCustomerHandler(dbConnection *dbadapter.DatabaseAdapter) *CustomerHandle
 }
 
 func (h *CustomerHandler) CreateCustomer(c echo.Context) error {
+	var customerCreateRequest usecase.CustomerInput
+	if err := c.Bind(&customerCreateRequest); err != nil {
+		return c.JSON(http.StatusBadRequest, "error binding create customer request")
+	}
+
+	h.CustomerService.CreateCustomer(&customerCreateRequest)
 	return c.JSON(http.StatusOK, "")
 }

@@ -14,6 +14,14 @@ func NewCustomerUseCase(repository repositories.Customer) usecase.Customer {
 	return &Customer{CustomerRepository: repository}
 }
 
-func (p *Customer) CreateCustomer(CustomerDTO *usecase.CustomerInput) (*entity.Customer, error) {
+func (p *Customer) CreateCustomer(customerDTO *usecase.CustomerInput) (*entity.Customer, error) {
+	customerEntity := entity.Customer{
+		ID:    customerDTO.ID,
+		Name:  customerDTO.Nome,
+		Email: customerDTO.Email,
+		TaxID: customerDTO.TaxID,
+	}
+
+	p.CustomerRepository.CreateCustomer(&customerEntity)
 	return nil, nil
 }
