@@ -8,6 +8,7 @@ import (
 
 type HealthHandler struct{}
 
+// NewHealthHandler cria e retorna uma nova instância de HealthHandler.
 func NewHealthHandler() *HealthHandler { return &HealthHandler{} }
 
 func (h *HealthHandler) HealthCheck(c echo.Context) error {

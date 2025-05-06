@@ -14,6 +14,7 @@ type CustomerHandler struct {
 	CustomerService usecase.Customer
 }
 
+// NewCustomerHandler cria e retorna um CustomerHandler configurado com o serviço de clientes baseado no repositório fornecido pela conexão de banco de dados.
 func NewCustomerHandler(dbConnection *dbadapter.DatabaseAdapter) *CustomerHandler {
 	CustomerRepository := repositories.NewCustomerRepository(dbConnection)
 

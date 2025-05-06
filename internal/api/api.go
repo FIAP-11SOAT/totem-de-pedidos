@@ -12,6 +12,7 @@ type api struct {
 	port       string
 }
 
+// New cria e retorna uma nova instância da estrutura api com o Echo engine e a porta especificados.
 func New(echoEngine *echo.Echo, port string) *api {
 	return &api{echoEngine: echoEngine, port: port}
 }

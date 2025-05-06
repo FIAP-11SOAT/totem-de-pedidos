@@ -14,6 +14,7 @@ type CustomerRepository struct {
 	sqlClient *pgx.Conn
 }
 
+// NewCustomerRepository cria uma nova instância de CustomerRepository utilizando o adaptador de banco de dados fornecido e retorna uma implementação do repositório de clientes.
 func NewCustomerRepository(database *dbadapter.DatabaseAdapter) repositories.Customer {
 	return &CustomerRepository{
 		sqlClient: database.Client(),

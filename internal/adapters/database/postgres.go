@@ -15,6 +15,9 @@ type DatabaseAdapter struct {
 	client *pgx.Conn
 }
 
+// New inicializa e retorna uma nova instância de DatabaseAdapter conectada ao banco de dados PostgreSQL.
+// Utiliza variáveis de ambiente para configurar a conexão e realiza um teste de conectividade ao banco.
+// Em caso de falha na conexão ou no ping, a função interrompe a execução com panic.
 func New() *DatabaseAdapter {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()

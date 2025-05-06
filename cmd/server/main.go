@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// main inicializa o adaptador de banco de dados, configura o servidor web e inicia a aplicação na porta definida pela variável de ambiente SERVER_PORT.
 func main() {
 	databaseAdapter := dbadapter.New()
 	
