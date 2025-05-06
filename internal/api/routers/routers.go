@@ -19,10 +19,12 @@ func New(echoEngine *echo.Echo) *Routes {
 func (r *Routes) SetupRouters(dbConnection *dbadapter.DatabaseAdapter) *echo.Echo {
 	defaultHandler := handlers.NewHealthHandler()
 	productHandler := handlers.NewProductHandler(dbConnection)
+	customerHandler := handlers.NewCustomerHandler(dbConnection)
 
 	r.setupHandlers(
 		defaultHandler,
 		productHandler,
+		customerHandler,
 	)
 
 	return r.echoEngine
@@ -31,6 +33,7 @@ func (r *Routes) SetupRouters(dbConnection *dbadapter.DatabaseAdapter) *echo.Ech
 func (r *Routes) setupHandlers(
 	defaultHandler *handlers.HealthHandler,
 	productHandler *handlers.ProductHandler,
+	customerHandler *handlers.CustomerHandler,
 ) {
 	r.echoEngine.GET("/health", defaultHandler.HealthCheck)
 
@@ -41,4 +44,5 @@ func (r *Routes) setupHandlers(
 	r.echoEngine.POST("/products", productHandler.CreateProduct)
 	r.echoEngine.PUT("/products/:id", productHandler.UpdateProduct)
 	r.echoEngine.DELETE("/products/:id", productHandler.DeleteProduct)
+	r.echoEngine.POST("/customer", customerHandler.CreateCustomer)
 }
