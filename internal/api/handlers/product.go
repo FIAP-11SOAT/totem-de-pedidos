@@ -22,35 +22,46 @@ func NewProductHandler(dbConnection *dbadapter.DatabaseAdapter) *ProductHandler 
 	}
 }
 
-func (h *ProductHandler) ListAllProducts(c echo.Context) error {
-	// implement-me
-	return c.JSON(http.StatusInternalServerError, "")
-
-}
-
-func (h *ProductHandler) FindProductById(c echo.Context) error {
-	// implement-me
-	return c.JSON(http.StatusInternalServerError, "")
-
-}
-
-func (h *ProductHandler) CreateProduct(c echo.Context) error {
-	// implement-me
-	return c.JSON(http.StatusInternalServerError, "")
-
-}
-
-func (h *ProductHandler) UpdateProduct(c echo.Context) error {
+func (p *ProductHandler) ListAllProducts(c echo.Context) error {
 	// implement-me
 	return c.JSON(http.StatusInternalServerError, "")
 }
 
-func (h *ProductHandler) DeleteProduct(c echo.Context) error {
+func (p *ProductHandler) FindProductById(c echo.Context) error {
 	// implement-me
 	return c.JSON(http.StatusInternalServerError, "")
 }
 
-func (h *ProductHandler) ListAllCategories(c echo.Context) error {
+// CreateProduct is the handler to receive IO and call usecase to create a product.
+func (p *ProductHandler) CreateProduct(c echo.Context) error {
+	productInput := new(usecase.ProductInput)
+	if err := c.Bind(productInput); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	if err := productInput.Validate(); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	createdProduct, err := p.productService.CreateProduct(productInput)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusCreated, createdProduct)
+}
+
+func (p *ProductHandler) UpdateProduct(c echo.Context) error {
+	// implement-me
+	return c.JSON(http.StatusInternalServerError, "")
+}
+
+func (p *ProductHandler) DeleteProduct(c echo.Context) error {
+	// implement-me
+	return c.JSON(http.StatusInternalServerError, "")
+}
+
+func (p *ProductHandler) ListAllCategories(c echo.Context) error {
 	// implement-me
 	return c.JSON(http.StatusInternalServerError, "")
 }

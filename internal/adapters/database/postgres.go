@@ -12,21 +12,32 @@ import (
 )
 
 type DatabaseAdapter struct {
-	client *pgx.Conn
+	Client *pgx.Conn
 }
 
-func New() *DatabaseAdapter {
+type Input struct {
+	Db_driver  string
+	Db_user    string
+	Db_pass    string
+	Db_host    string
+	Db_name    string
+	Db_options string
+}
+
+func New(input Input) *DatabaseAdapter {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
 	connStr := fmt.Sprintf("%s://%s:%s@%s/%s%s",
-		os.Getenv("DB_DRIVER"),
-		os.Getenv("DB_USER"),
-		url.QueryEscape(os.Getenv("DB_PASS")),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_OPTIONS"),
+		input.Db_driver,
+		input.Db_user,
+		url.QueryEscape(input.Db_pass),
+		input.Db_host,
+		input.Db_name,
+		input.Db_options,
 	)
+
+	fmt.Println("********************", connStr)
 
 	client, err := pgx.Connect(ctx, connStr)
 	if err != nil {
@@ -39,13 +50,9 @@ func New() *DatabaseAdapter {
 		panic(err)
 	}
 
-	return &DatabaseAdapter{client: client}
-}
-
-func (d *DatabaseAdapter) Client() *pgx.Conn {
-	return d.client
+	return &DatabaseAdapter{Client: client}
 }
 
 func (d *DatabaseAdapter) DataBaseHeatlh(ctx context.Context) error {
-	return d.client.Ping(ctx)
+	return d.Client.Ping(ctx)
 }

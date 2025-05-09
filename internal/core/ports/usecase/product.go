@@ -5,11 +5,11 @@ import (
 )
 
 type ProductInput struct {
-	Id          string  `json:"id"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
-	IDCategory  string  `json:"category_id"`
-	Category    string  `json:"category"`
+	Name         string  `json:"name"`
+	Description  string  `json:"description"`
+	Price        float64 `json:"price"`
+	ImageURL     string  `json:"imageUrl"`
+	CategoryName string  `json:"categoryName"`
 }
 
 type Product interface {
@@ -18,6 +18,10 @@ type Product interface {
 	CreateProduct(productDTO *ProductInput) (*entity.Product, error)
 	UpdateProduct(productDTO *ProductInput) (*entity.Product, error)
 	DeleteProduct(productID string) error
-	GetCategoryName(categoryName string) (string, error)
 	GetCategories() ([]*entity.ProductCategory, error)
+}
+
+func (p *ProductInput) Validate() error {
+	// TODO: implement-me
+	return nil
 }

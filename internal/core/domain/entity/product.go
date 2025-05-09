@@ -20,5 +20,4 @@ type Product struct {
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 	CategoryID      int
-	Category        *ProductCategory
 }
