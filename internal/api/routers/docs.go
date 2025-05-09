@@ -8,5 +8,5 @@ import (
 
 func DocsRouter(e *echo.Echo) {
 	h := handlers.NewDocsHandler()
-	e.GET("/docs", h.Docs)
+	e.GET("/docs/:path", h.Docs)
 }
