@@ -127,7 +127,7 @@ func (p *productRepository) DeleteProduct(ctx context.Context, productID string)
 		DELETE FROM products
 		WHERE id = $1
 	`
-	
+
 	_, err := p.sqlClient.Exec(ctx, query, productID)
 	if err != nil {
 		return err
@@ -136,8 +136,37 @@ func (p *productRepository) DeleteProduct(ctx context.Context, productID string)
 	return nil
 }
 
-// GetCategories returns a list of all product categories
-func (p *productRepository) GetCategories() ([]*entity.ProductCategory, error) {
-	// TODO: implement-me
-	return nil, nil
+func (p *productRepository) GetCategories(ctx context.Context) ([]*entity.ProductCategory, error) {
+	query := `
+		SELECT id, name, description, created_at, updated_at
+		FROM product_categories
+	`
+
+	rows, err := p.sqlClient.Query(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var categories []*entity.ProductCategory
+	for rows.Next() {
+		var category entity.ProductCategory
+		err := rows.Scan(
+			&category.ID,
+			&category.Name,
+			&category.Description,
+			&category.CreatedAt,
+			&category.UpdatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+		categories = append(categories, &category)
+	}
+
+	if rows.Err() != nil {
+		return nil, rows.Err()
+	}
+
+	return categories, nil
 }
