@@ -19,14 +19,74 @@ func NewProductRepository(database *dbadapter.DatabaseAdapter) repositories.Prod
 	}
 }
 
-func (p *productRepository) ListProducts(description string) ([]*entity.Product, error) {
-	// TODO: implement-me
-	return nil, nil
+func (p *productRepository) ListProducts(ctx context.Context, description string) ([]*entity.Product, error) {
+	query := `
+		SELECT id, name, description, price, image_url, preparation_time, created_at, updated_at, category_id
+		FROM products
+		WHERE description ILIKE $1
+	`
+
+	rows, err := p.sqlClient.Query(ctx, query, "%"+description+"%")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var products []*entity.Product
+	for rows.Next() {
+		var product entity.Product
+		err := rows.Scan(
+			&product.ID,
+			&product.Name,
+			&product.Description,
+			&product.Price,
+			&product.ImageURL,
+			&product.PreparationTime,
+			&product.CreatedAt,
+			&product.UpdatedAt,
+			&product.CategoryID,
+		)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, &product)
+	}
+
+	if rows.Err() != nil {
+		return nil, rows.Err()
+	}
+
+	return products, nil
 }
 
-func (p *productRepository) FindProductById(id string) (*entity.Product, error) {
-	// TODO: implement-me
-	return nil, nil
+func (p *productRepository) FindProductById(ctx context.Context, id string) (*entity.Product, error) {
+	query := `
+		SELECT id, name, description, price, image_url, preparation_time, created_at, updated_at, category_id
+		FROM products
+		WHERE id = $1
+	`
+
+	var product entity.Product
+	err := p.sqlClient.QueryRow(ctx, query, id).Scan(
+		&product.ID,
+		&product.Name,
+		&product.Description,
+		&product.Price,
+		&product.ImageURL,
+		&product.PreparationTime,
+		&product.CreatedAt,
+		&product.UpdatedAt,
+		&product.CategoryID,
+	)
+
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &product, nil
 }
 
 func (p *productRepository) CreateProduct(ctx context.Context, product *entity.Product) (int, error) {
