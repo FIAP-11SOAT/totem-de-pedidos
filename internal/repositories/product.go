@@ -59,9 +59,47 @@ func (p *productRepository) GetCategoryByName(categoryName string) (*entity.Prod
 	return nil, nil
 }
 
-func (p *productRepository) UpdateProduct(product *entity.Product) (*entity.Product, error) {
-	// TODO: implement-me
-	return nil, nil
+func (p *productRepository) UpdateProduct(ctx context.Context, product *entity.Product) (*entity.Product, error) {
+	query := `
+		UPDATE products
+		SET name = $1,
+			description = $2,
+			price = $3,
+			image_url = $4,
+			preparation_time = $5,
+			updated_at = $6,
+			category_id = $7
+		WHERE id = $8
+		RETURNING id, name, description, price, image_url, preparation_time, created_at, updated_at, category_id
+	`
+
+	var updatedProduct entity.Product
+	err := p.sqlClient.QueryRow(ctx, query,
+		product.Name,
+		product.Description,
+		product.Price,
+		product.ImageURL,
+		product.PreparationTime,
+		product.UpdatedAt,
+		product.CategoryID,
+		product.ID,
+	).Scan(
+		&updatedProduct.ID,
+		&updatedProduct.Name,
+		&updatedProduct.Description,
+		&updatedProduct.Price,
+		&updatedProduct.ImageURL,
+		&updatedProduct.PreparationTime,
+		&updatedProduct.CreatedAt,
+		&updatedProduct.UpdatedAt,
+		&updatedProduct.CategoryID,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedProduct, nil
 }
 
 func (p *productRepository) DeleteProduct(productID string) error {
