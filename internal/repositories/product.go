@@ -54,9 +54,29 @@ func createProductQuery() string {
 	return `INSERT....RETURNING id`
 }
 
-func (p *productRepository) GetCategoryByName(categoryName string) (*entity.ProductCategory, error) {
-	// TODO: implement-me
-	return nil, nil
+func (p *productRepository) GetCategoryByName(ctx context.Context, categoryName string) (*entity.ProductCategory, error) {
+	query := `
+		SELECT id, name, created_at, updated_at
+		FROM product_categories
+		WHERE name = $1
+	`
+
+	var category entity.ProductCategory
+	err := p.sqlClient.QueryRow(ctx, query, categoryName).Scan(
+		&category.ID,
+		&category.Name,
+		&category.CreatedAt,
+		&category.UpdatedAt,
+	)
+
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &category, nil
 }
 
 func (p *productRepository) UpdateProduct(ctx context.Context, product *entity.Product) (*entity.Product, error) {
@@ -102,8 +122,17 @@ func (p *productRepository) UpdateProduct(ctx context.Context, product *entity.P
 	return &updatedProduct, nil
 }
 
-func (p *productRepository) DeleteProduct(productID string) error {
-	// TODO: implement-me
+func (p *productRepository) DeleteProduct(ctx context.Context, productID string) error {
+	query := `
+		DELETE FROM products
+		WHERE id = $1
+	`
+	
+	_, err := p.sqlClient.Exec(ctx, query, productID)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
