@@ -7,11 +7,11 @@ import (
 )
 
 type Product interface {
-	ListProducts(description string) ([]*entity.Product, error)
-	FindProductById(id string) (*entity.Product, error)
-	CreateProduct(ctx context.Context, product *entity.Product) (int, error)
-	GetCategoryByName(categoryName string) (*entity.ProductCategory, error)
-	GetCategories() ([]*entity.ProductCategory, error)
-	UpdateProduct(product *entity.Product) (*entity.Product, error)
+	CreateProduct(ctx context.Context, product entity.Product) (int, error)
 	DeleteProduct(productID string) error
+	FindProductById(id string) (*entity.Product, error)
+	GetCategories() ([]entity.ProductCategory, error)
+	GetCategoryByName(categoryName string) (entity.ProductCategory, error)
+	ListProducts(description string) ([]*entity.Product, error)
+	UpdateProduct(product entity.Product) (entity.Product, error)
 }

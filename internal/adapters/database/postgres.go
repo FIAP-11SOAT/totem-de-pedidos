@@ -37,8 +37,6 @@ func New(input Input) *DatabaseAdapter {
 		input.Db_options,
 	)
 
-	fmt.Println("********************", connStr)
-
 	client, err := pgx.Connect(ctx, connStr)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connection to database: %v\n", err)

@@ -29,11 +29,10 @@ func (p *productRepository) FindProductById(id string) (*entity.Product, error) 
 	return nil, nil
 }
 
-func (p *productRepository) CreateProduct(ctx context.Context, product *entity.Product) (int, error) {
+func (p *productRepository) CreateProduct(ctx context.Context, product entity.Product) (int, error) {
 	var createdProductId int
 
 	err := p.sqlClient.QueryRow(ctx, createProductQuery(),
-		product.ID,
 		product.Name,
 		product.Description,
 		product.Price,
@@ -51,17 +50,30 @@ func (p *productRepository) CreateProduct(ctx context.Context, product *entity.P
 }
 
 func createProductQuery() string {
-	return `INSERT....RETURNING id`
+	return `
+		INSERT INTO products (
+			name,
+			description,
+			price,
+			image_url,
+			preparation_time,
+			created_at,
+			updated_at,
+			category_id
+		)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		RETURNING id
+	`
 }
 
-func (p *productRepository) GetCategoryByName(categoryName string) (*entity.ProductCategory, error) {
+func (p *productRepository) GetCategoryByName(categoryName string) (entity.ProductCategory, error) {
 	// TODO: implement-me
-	return nil, nil
+	return entity.ProductCategory{}, nil
 }
 
-func (p *productRepository) UpdateProduct(product *entity.Product) (*entity.Product, error) {
+func (p *productRepository) UpdateProduct(product entity.Product) (entity.Product, error) {
 	// TODO: implement-me
-	return nil, nil
+	return entity.Product{}, nil
 }
 
 func (p *productRepository) DeleteProduct(productID string) error {
@@ -70,7 +82,7 @@ func (p *productRepository) DeleteProduct(productID string) error {
 }
 
 // GetCategories returns a list of all product categories
-func (p *productRepository) GetCategories() ([]*entity.ProductCategory, error) {
+func (p *productRepository) GetCategories() ([]entity.ProductCategory, error) {
 	// TODO: implement-me
 	return nil, nil
 }

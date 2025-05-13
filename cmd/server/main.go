@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-
 	databaseAdapter := dbadapter.New(dbadapter.Input{
 		Db_driver:  os.Getenv("DB_DRIVER"),
 		Db_user:    os.Getenv("DB_USER"),

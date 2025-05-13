@@ -45,7 +45,7 @@ func (p *Product) CreateProduct(productInput *usecase.ProductInput) (*entity.Pro
 		CategoryID:      category.ID,
 	}
 
-	createdProductId, err := p.productRepository.CreateProduct(context.Background(), productToCreate)
+	createdProductId, err := p.productRepository.CreateProduct(context.Background(), *productToCreate)
 	if err != nil {
 		return nil, fmt.Errorf("error creating product")
 	}
@@ -57,10 +57,10 @@ func (p *Product) CreateProduct(productInput *usecase.ProductInput) (*entity.Pro
 	}, nil
 }
 
-func (p *Product) getCategoryName(categoryName string) (*entity.ProductCategory, error) {
+func (p *Product) getCategoryName(categoryName string) (entity.ProductCategory, error) {
 	category, err := p.productRepository.GetCategoryByName(categoryName)
 	if err != nil {
-		return nil, fmt.Errorf("category not found")
+		return entity.ProductCategory{}, fmt.Errorf("category not found")
 	}
 
 	return category, nil
