@@ -46,3 +46,15 @@ compose-up-db:
 
 compose-down-db:
 	docker compose down db
+
+
+
+# Docs
+docs-install-depends:
+	cd docs && npm i
+
+docs-compile-watch:
+	cd docs && npm run watch
+
+docs-preview:
+	cd docs && npm run preview
