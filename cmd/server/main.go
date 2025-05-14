@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/labstack/echo/v4/middleware"
 	"log"
 	"os"
+
+	"github.com/labstack/echo/v4/middleware"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api"
