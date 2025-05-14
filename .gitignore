@@ -143,3 +143,5 @@ fabric.properties
 # Ignore node_modules in any directory
 **/node_modules/
 .idea/
+
+.env

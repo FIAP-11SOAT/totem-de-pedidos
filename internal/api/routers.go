@@ -8,5 +8,4 @@ import (
 
 func Routers(e *echo.Echo) {
 	routers.HealthRouter(e)
-	routers.DocsRouter(e)
 }

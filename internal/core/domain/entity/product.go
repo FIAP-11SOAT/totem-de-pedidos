@@ -2,11 +2,12 @@ package entity
 
 import "time"
 
-type CategoryProduct struct {
+type ProductCategory struct {
 	ID          int
 	Name        string
 	Description string
 	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type Product struct {
@@ -17,6 +18,6 @@ type Product struct {
 	ImageURL        string
 	PreparationTime int
 	CreatedAt       time.Time
+	UpdatedAt       time.Time
 	CategoryID      int
-	Category        *CategoryProduct
 }
