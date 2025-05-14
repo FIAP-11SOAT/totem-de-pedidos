@@ -1,11 +1,13 @@
 package api
 
 import (
-	"totem-pedidos/internal/api/routers"
-
+	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/routers"
 	"github.com/labstack/echo/v4"
 )
 
-func Routers(e *echo.Echo) {
+func Routers(e *echo.Echo, dbConnection *dbadapter.DatabaseAdapter) {
+	routers.DocsRouter(e)
 	routers.HealthRouter(e)
+	routers.ProductsRouter(e, dbConnection)
 }

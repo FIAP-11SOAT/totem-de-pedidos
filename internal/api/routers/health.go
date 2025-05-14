@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func DocsRouter(e *echo.Echo) {
-	h := handlers.NewDocsHandler()
-	e.GET("/docs/:path", h.Docs)
+func HealthRouter(e *echo.Echo) {
+	h := handlers.NewHealthHandler()
+	e.GET("/health", h.HealthCheck)
 }

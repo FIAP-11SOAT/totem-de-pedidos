@@ -12,7 +12,5 @@ reviews:
   path_filters:
     - '!**/*.orig'
   auto_review:
-    enabled: true
+    enabled: false
     drafts: false
-chat:
-  auto_reply: true

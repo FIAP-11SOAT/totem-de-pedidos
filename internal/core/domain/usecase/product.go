@@ -58,7 +58,7 @@ func (p *Product) CreateProduct(productInput *usecase.ProductInput) (*entity.Pro
 }
 
 func (p *Product) getCategoryName(categoryName string) (*entity.ProductCategory, error) {
-	category, err := p.productRepository.GetCategoryByName(categoryName)
+	category, err := p.productRepository.GetCategoryByName(context.Background(), categoryName)
 	if err != nil {
 		return nil, fmt.Errorf("category not found")
 	}
@@ -71,7 +71,6 @@ func (p *Product) GetProductByCategoryID(categoryID int) ([]*entity.Product, err
 	if err != nil {
 		return nil, fmt.Errorf("error fetching products by category ID: %w", err)
 	}
-
 	return products, nil
 }
 
