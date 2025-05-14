@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/labstack/echo/v4/middleware"
 	"log"
 	"os"
 
@@ -28,7 +29,8 @@ func main() {
 	})
 
 	app := echo.New()
-	//app.Use(middleware.Recover())
+	app.Use(middleware.CORS())
+	app.Use(middleware.Recover())
 	//app.Use(middleware.Logger())
 	api.Routers(app, databaseAdapter)
 	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
