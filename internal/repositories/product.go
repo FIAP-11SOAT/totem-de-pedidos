@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
@@ -108,6 +109,46 @@ func (p *productRepository) CreateProduct(ctx context.Context, product *entity.P
 	}
 
 	return createdProductId, nil
+}
+
+func (p *productRepository) GetProductsByCategoryID(ctx context.Context, categoryID int) ([]*entity.Product, error) {
+	query := `
+        SELECT id, name, description, price, image_url, preparation_time, created_at, updated_at, category_id
+        FROM products
+        WHERE category_id = $1
+    `
+
+	rows, err := p.sqlClient.Query(ctx, query, categoryID)
+	if err != nil {
+		return nil, fmt.Errorf("error querying products by category ID: %w", err)
+	}
+	defer rows.Close()
+
+	var products []*entity.Product
+	for rows.Next() {
+		var product entity.Product
+		err := rows.Scan(
+			&product.ID,
+			&product.Name,
+			&product.Description,
+			&product.Price,
+			&product.ImageURL,
+			&product.PreparationTime,
+			&product.CreatedAt,
+			&product.UpdatedAt,
+			&product.CategoryID,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning product row: %w", err)
+		}
+		products = append(products, &product)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating over product rows: %w", err)
+	}
+
+	return products, nil
 }
 
 func createProductQuery() string {

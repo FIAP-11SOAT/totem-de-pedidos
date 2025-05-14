@@ -19,6 +19,7 @@ type Product interface {
 	UpdateProduct(productDTO *ProductInput) (*entity.Product, error)
 	DeleteProduct(productID string) error
 	GetCategories() ([]*entity.ProductCategory, error)
+	GetProductByCategoryID(categoryID int) ([]*entity.Product, error)
 }
 
 func (p *ProductInput) Validate() error {

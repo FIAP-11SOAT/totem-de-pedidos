@@ -66,6 +66,15 @@ func (p *Product) getCategoryName(categoryName string) (*entity.ProductCategory,
 	return category, nil
 }
 
+func (p *Product) GetProductByCategoryID(categoryID int) ([]*entity.Product, error) {
+	products, err := p.productRepository.GetProductsByCategoryID(context.Background(), categoryID)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching products by category ID: %w", err)
+	}
+
+	return products, nil
+}
+
 func (p *Product) UpdateProduct(productDTO *usecase.ProductInput) (*entity.Product, error) {
 	// TODO: implement-me
 	return nil, nil

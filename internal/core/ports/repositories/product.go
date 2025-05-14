@@ -14,4 +14,5 @@ type Product interface {
 	GetCategories() ([]*entity.ProductCategory, error)
 	UpdateProduct(product *entity.Product) (*entity.Product, error)
 	DeleteProduct(productID string) error
+	GetProductsByCategoryID(ctx context.Context, categoryID int) ([]*entity.Product, error)
 }
