@@ -2,11 +2,16 @@ package routers
 
 import (
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/handlers"
 	"github.com/labstack/echo/v4"
 )
 
 func CategoryRouter(e *echo.Echo, dbConnection *dbadapter.DatabaseAdapter) {
-	e.GET("/categories", func(c echo.Context) error {
-		return c.JSON(200, "ok")
-	})
+	h := handlers.NewCategoryHandler(dbConnection)
+
+	e.GET("/categories", h.ListAllCategories)
+	e.GET("/categories/:id", h.FindCategoryById)
+	e.POST("/categories", h.CreateCategory)
+	e.PUT("/categories/:id", h.UpdateCategory)
+	e.DELETE("/categories/:id", h.DeleteCategory)
 }
