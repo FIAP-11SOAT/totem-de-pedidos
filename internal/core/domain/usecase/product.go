@@ -3,7 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/inputs"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"time"
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
@@ -23,7 +23,7 @@ func (p *Product) GetProductById(id string) (*entity.Product, error) {
 	return nil, nil
 }
 
-func (p *Product) GetProducts(input *inputs.ProductFilterInput) ([]*entity.Product, error) {
+func (p *Product) GetProducts(input *input.ProductFilterInput) ([]*entity.Product, error) {
 	products, err := p.productRepository.ListProducts(context.Background(), input)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (p *Product) GetProducts(input *inputs.ProductFilterInput) ([]*entity.Produ
 	return products, nil
 }
 
-func (p *Product) CreateProduct(productInput *inputs.ProductInput) (*entity.Product, error) {
+func (p *Product) CreateProduct(productInput *input.ProductInput) (*entity.Product, error) {
 	category, err := p.getCategoryName(productInput.CategoryName)
 	if err != nil {
 		return nil, err
@@ -77,7 +77,7 @@ func (p *Product) GetProductByCategoryID(categoryID int) ([]*entity.Product, err
 	return products, nil
 }
 
-func (p *Product) UpdateProduct(productDTO *inputs.ProductInput) (*entity.Product, error) {
+func (p *Product) UpdateProduct(productDTO *input.ProductInput) (*entity.Product, error) {
 	return nil, nil
 }
 

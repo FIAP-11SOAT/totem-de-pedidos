@@ -3,7 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/inputs"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
@@ -21,7 +21,7 @@ func NewProductRepository(database *dbadapter.DatabaseAdapter) repositories.Prod
 	}
 }
 
-func (p *productRepository) ListProducts(ctx context.Context, input *inputs.ProductFilterInput) ([]*entity.Product, error) {
+func (p *productRepository) ListProducts(ctx context.Context, input *input.ProductFilterInput) ([]*entity.Product, error) {
 	query := `
         SELECT p.id, p.name, p.description, p.price, p.image_url, p.preparation_time, p.created_at, p.updated_at, p.category_id
         FROM products p

@@ -1,4 +1,4 @@
-package inputs
+package input
 
 type ProductInput struct {
 	Name         string  `json:"name"`

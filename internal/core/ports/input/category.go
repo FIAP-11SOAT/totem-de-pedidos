@@ -1,4 +1,4 @@
-package inputs
+package input
 
 type CategoryInput struct {
 	ID          int    `json:"id"`

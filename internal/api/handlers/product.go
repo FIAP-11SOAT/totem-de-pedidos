@@ -1,7 +1,9 @@
 package handlers
 
 import (
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/inputs"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/output"
 	"net/http"
 	"strconv"
 
@@ -25,7 +27,7 @@ func NewProductHandler(dbConnection *dbadapter.DatabaseAdapter) *ProductHandler 
 }
 
 func (p *ProductHandler) ListAllProducts(c echo.Context) error {
-	filter := new(inputs.ProductFilterInput)
+	filter := new(input.ProductFilterInput)
 	if err := c.Bind(filter); err != nil {
 		c.Logger().Error("Error binding filter", err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
@@ -41,7 +43,12 @@ func (p *ProductHandler) ListAllProducts(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, make([]string, 0))
 	}
 
-	return c.JSON(http.StatusOK, products)
+	resultProducts := make([]output.ProductOutput, 0)
+	for _, product := range products {
+		resultProducts = append(resultProducts, mapper.MapProductToOutput(product))
+	}
+
+	return c.JSON(http.StatusOK, resultProducts)
 }
 
 func (p *ProductHandler) FindProductById(c echo.Context) error {
@@ -49,7 +56,7 @@ func (p *ProductHandler) FindProductById(c echo.Context) error {
 }
 
 func (p *ProductHandler) CreateProduct(c echo.Context) error {
-	productInput := new(inputs.ProductInput)
+	productInput := new(input.ProductInput)
 	if err := c.Bind(productInput); err != nil {
 		c.Logger().Error("Error binding product input", err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})

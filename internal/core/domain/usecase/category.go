@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/inputs"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
 )
@@ -27,7 +27,7 @@ func (c *Category) GetCategories() ([]*entity.Category, error) {
 	return categories, nil
 }
 
-func (c *Category) CreateCategory(categoryDTO *inputs.CategoryInput) (*entity.Category, error) {
+func (c *Category) CreateCategory(categoryDTO *input.CategoryInput) (*entity.Category, error) {
 	categoryToCreate := &entity.Category{
 		Name:        categoryDTO.Name,
 		Description: categoryDTO.Description,

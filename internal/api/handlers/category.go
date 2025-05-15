@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/inputs"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
@@ -61,7 +61,7 @@ func (c *CategoryHandler) FindCategoryById(ctx echo.Context) error {
 }
 
 func (c *CategoryHandler) CreateCategory(ctx echo.Context) error {
-	categoryInput := new(inputs.CategoryInput)
+	categoryInput := new(input.CategoryInput)
 	if err := ctx.Bind(categoryInput); err != nil {
 		ctx.Logger().Error("Error binding category input", err)
 		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
