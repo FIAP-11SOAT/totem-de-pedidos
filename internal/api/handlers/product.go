@@ -33,7 +33,12 @@ func (p *ProductHandler) ListAllProducts(c echo.Context) error {
 
 	products, err := p.productService.GetProducts(filter)
 	if err != nil {
+		c.Logger().Error("Error getting products", err)
 		return err
+	}
+
+	if len(products) == 0 {
+		return c.JSON(http.StatusNotFound, make([]string, 0))
 	}
 
 	return c.JSON(http.StatusOK, products)

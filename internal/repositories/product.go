@@ -23,16 +23,29 @@ func NewProductRepository(database *dbadapter.DatabaseAdapter) repositories.Prod
 
 func (p *productRepository) ListProducts(ctx context.Context, input *inputs.ProductFilterInput) ([]*entity.Product, error) {
 	query := `
-		SELECT id, name, description, price, image_url, preparation_time, created_at, updated_at, category_id
-		FROM products p
-		JOIN product_categories pc ON products.category_id = product_categories.id
-		WHERE p.name ILIKE $1 OR pc.name ILIKE $2
-	`
+        SELECT p.id, p.name, p.description, p.price, p.image_url, p.preparation_time, p.created_at, p.updated_at, p.category_id
+        FROM products p
+        JOIN product_categories pc ON p.category_id = pc.id
+    `
+	var args []interface{}
+	where := ""
 
-	name := "%" + input.Name + "%"
-	categoryName := "%" + input.CategoryName + "%"
+	if input.Name != "" {
+		args = append(args, "%"+input.Name+"%")
+		where += fmt.Sprintf("p.name ILIKE $%d", len(args))
+	}
+	if input.CategoryName != "" {
+		if where != "" {
+			where += " AND "
+		}
+		args = append(args, "%"+input.CategoryName+"%")
+		where += fmt.Sprintf("pc.name ILIKE $%d", len(args))
+	}
+	if where != "" {
+		query += " WHERE " + where
+	}
 
-	rows, err := p.sqlClient.Query(ctx, query, name, categoryName)
+	rows, err := p.sqlClient.Query(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
