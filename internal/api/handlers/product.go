@@ -91,6 +91,25 @@ func (p *ProductHandler) GetProductByCategoryID(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid Category ID"})
 	}
 
+	products, erro := p.productService.GetProductByCategoryID(CategoryIDInt)
+	if erro != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": erro.Error()})
+	}
+
+	return c.JSON(http.StatusOK, products)
+}
+
+func (p *ProductHandler) GetProductByCategoryID(c echo.Context) error {
+	CategoryID := c.Param("id")
+	if CategoryID == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Category ID is required"})
+	}
+
+	CategoryIDInt, err := strconv.Atoi(CategoryID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid Category ID"})
+	}
+
 	products, err := p.productService.GetProductByCategoryID(CategoryIDInt)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
