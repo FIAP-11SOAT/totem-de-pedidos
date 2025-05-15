@@ -23,7 +23,7 @@ func NewCategoryRepository(database *dbadapter.DatabaseAdapter) repositories.Cat
 func (r *categoryRepository) GetCategories(ctx context.Context) ([]*entity.Category, error) {
 	query := `
 		SELECT id, name, description, created_at, updated_at
-		FROM categories
+		FROM product_categories
 	`
 
 	rows, err := r.sqlClient.Query(ctx, query)
@@ -47,7 +47,7 @@ func (r *categoryRepository) GetCategories(ctx context.Context) ([]*entity.Categ
 }
 func (r *categoryRepository) CreateCategory(ctx context.Context, category *entity.Category) (int, error) {
 	query := `
-		INSERT INTO categories (name, description, created_at, updated_at)
+		INSERT INTO product_categories (name, description, created_at, updated_at)
 		VALUES ($1, $2, $3, $4)
 		RETURNING id
 	`
@@ -63,7 +63,7 @@ func (r *categoryRepository) CreateCategory(ctx context.Context, category *entit
 func (r *categoryRepository) FindCategoryById(ctx context.Context, id int) (*entity.Category, error) {
 	query := `
 		SELECT id, name, description, created_at, updated_at
-		FROM categories
+		FROM product_categories
 		WHERE id = $1
 	`
 
@@ -79,7 +79,7 @@ func (r *categoryRepository) FindCategoryById(ctx context.Context, id int) (*ent
 }
 func (r *categoryRepository) UpdateCategory(ctx context.Context, category *entity.Category) (*entity.Category, error) {
 	query := `
-		UPDATE categories
+		UPDATE product_categories
 		SET name = $1, description = $2, updated_at = $3
 		WHERE id = $4
 		RETURNING id, name, description, created_at, updated_at
@@ -92,9 +92,10 @@ func (r *categoryRepository) UpdateCategory(ctx context.Context, category *entit
 	}
 	return &updatedCategory, nil
 }
+
 func (r *categoryRepository) DeleteCategory(ctx context.Context, categoryID int) error {
 	query := `
-		DELETE FROM categories
+		DELETE FROM product_categories
 		WHERE id = $1
 	`
 
