@@ -1,15 +1,24 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"os"
+
+	"github.com/labstack/echo/v4/middleware"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api"
-	routes "github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/routers"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	databaseAdapter := dbadapter.New(dbadapter.Input{
 		Db_driver:  os.Getenv("DB_DRIVER"),
@@ -20,9 +29,10 @@ func main() {
 		Db_options: os.Getenv("DB_OPTIONS"),
 	})
 
-	echoEngine := echo.New()
-
-	routes := routes.New(echoEngine)
-	serverApi := api.New(routes.SetupRouters(databaseAdapter), os.Getenv("SERVER_PORT"))
-	serverApi.ListenAndServe()
+	app := echo.New()
+	app.Use(middleware.CORS())
+	app.Use(middleware.Recover())
+	//app.Use(middleware.Logger())
+	api.Routers(app, databaseAdapter)
+	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }
