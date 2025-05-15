@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
+
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
@@ -111,8 +112,13 @@ func (p *productRepository) FindProductById(ctx context.Context, id string) (*en
 func (p *productRepository) CreateProduct(ctx context.Context, product *entity.Product) (int, error) {
 	var createdProductId int
 
-	err := p.sqlClient.QueryRow(ctx, createProductQuery(),
-		product.ID,
+	query := `
+		INSERT INTO products (name, description, price, image_url, preparation_time, created_at, updated_at, category_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		RETURNING id
+	`
+
+	err := p.sqlClient.QueryRow(ctx, query,
 		product.Name,
 		product.Description,
 		product.Price,

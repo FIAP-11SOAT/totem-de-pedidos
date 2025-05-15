@@ -1,11 +1,11 @@
 package input
 
 type ProductInput struct {
-	Name         string  `json:"name"`
-	Description  string  `json:"description"`
-	Price        float64 `json:"price"`
-	ImageURL     string  `json:"imageUrl"`
-	CategoryName string  `json:"categoryName"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	ImageURL    string  `json:"image_url"`
+	CategoryID  int     `json:"category_id"`
 }
 
 type ProductFilterInput struct {

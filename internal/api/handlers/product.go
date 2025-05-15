@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/output"
-	"net/http"
-	"strconv"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	service "github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/usecase"
@@ -52,7 +53,20 @@ func (p *ProductHandler) ListAllProducts(c echo.Context) error {
 }
 
 func (p *ProductHandler) FindProductById(c echo.Context) error {
-	return c.JSON(http.StatusInternalServerError, "")
+	id := c.Param("id")
+	if id == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Product ID is required"})
+	}
+
+	product, err := p.productService.GetProductById(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+	if product == nil {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "Product not found"})
+	}
+
+	return c.JSON(http.StatusOK, product)
 }
 
 func (p *ProductHandler) CreateProduct(c echo.Context) error {
