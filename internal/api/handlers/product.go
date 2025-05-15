@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/inputs"
 	"net/http"
 	"strconv"
 
@@ -24,18 +25,26 @@ func NewProductHandler(dbConnection *dbadapter.DatabaseAdapter) *ProductHandler 
 }
 
 func (p *ProductHandler) ListAllProducts(c echo.Context) error {
-	// implement-me
-	return c.JSON(http.StatusInternalServerError, "")
+	filter := new(inputs.ProductFilterInput)
+	if err := c.Bind(filter); err != nil {
+		c.Logger().Error("Error binding filter", err)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	products, err := p.productService.GetProducts(filter)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, products)
 }
 
 func (p *ProductHandler) FindProductById(c echo.Context) error {
-	// implement-me
 	return c.JSON(http.StatusInternalServerError, "")
 }
 
-// CreateProduct is the handler to receive IO and call usecase to create a product.
 func (p *ProductHandler) CreateProduct(c echo.Context) error {
-	productInput := new(usecase.ProductInput)
+	productInput := new(inputs.ProductInput)
 	if err := c.Bind(productInput); err != nil {
 		c.Logger().Error("Error binding product input", err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
@@ -55,17 +64,14 @@ func (p *ProductHandler) CreateProduct(c echo.Context) error {
 }
 
 func (p *ProductHandler) UpdateProduct(c echo.Context) error {
-	// implement-me
 	return c.JSON(http.StatusInternalServerError, "")
 }
 
 func (p *ProductHandler) DeleteProduct(c echo.Context) error {
-	// implement-me
 	return c.JSON(http.StatusInternalServerError, "")
 }
 
 func (p *ProductHandler) ListAllCategories(c echo.Context) error {
-	// implement-me
 	return c.JSON(http.StatusInternalServerError, "")
 }
 
@@ -80,9 +86,9 @@ func (p *ProductHandler) GetProductByCategoryID(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid Category ID"})
 	}
 
-	products, erro := p.productService.GetProductByCategoryID(CategoryIDInt)
-	if erro != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": erro.Error()})
+	products, err := p.productService.GetProductByCategoryID(CategoryIDInt)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, products)

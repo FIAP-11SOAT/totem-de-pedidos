@@ -1,0 +1,16 @@
+# .air.toml
+
+[build]
+  cmd = "go build -o ./tmp/server ./cmd/server"
+  bin = "tmp/server"
+  full_bin = "tmp/server"
+  include_ext = ["go"]
+  exclude_dir = ["tmp", "vendor"]
+  exclude_file = []
+  follow_symlink = true
+  dir = "."
+  delay = 1000
+  stop_on_error = true
+
+[log]
+  time = true

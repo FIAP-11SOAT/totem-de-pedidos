@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/inputs"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
@@ -20,14 +21,18 @@ func NewProductRepository(database *dbadapter.DatabaseAdapter) repositories.Prod
 	}
 }
 
-func (p *productRepository) ListProducts(ctx context.Context, description string) ([]*entity.Product, error) {
+func (p *productRepository) ListProducts(ctx context.Context, input *inputs.ProductFilterInput) ([]*entity.Product, error) {
 	query := `
 		SELECT id, name, description, price, image_url, preparation_time, created_at, updated_at, category_id
-		FROM products
-		WHERE description ILIKE $1
+		FROM products p
+		JOIN product_categories pc ON products.category_id = product_categories.id
+		WHERE p.name ILIKE $1 OR pc.name ILIKE $2
 	`
 
-	rows, err := p.sqlClient.Query(ctx, query, "%"+description+"%")
+	name := "%" + input.Name + "%"
+	categoryName := "%" + input.CategoryName + "%"
+
+	rows, err := p.sqlClient.Query(ctx, query, name, categoryName)
 	if err != nil {
 		return nil, err
 	}

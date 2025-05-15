@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/inputs"
 	"time"
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
@@ -19,16 +20,18 @@ func NewProductUseCase(repository repositories.Product) usecase.Product {
 }
 
 func (p *Product) GetProductById(id string) (*entity.Product, error) {
-	// TODO: implement-me
 	return nil, nil
 }
 
-func (p *Product) GetProducts(description string) ([]*entity.Product, error) {
-	// TODO: implement-me
-	return nil, nil
+func (p *Product) GetProducts(input *inputs.ProductFilterInput) ([]*entity.Product, error) {
+	products, err := p.productRepository.ListProducts(context.Background(), input)
+	if err != nil {
+		return nil, err
+	}
+	return products, nil
 }
 
-func (p *Product) CreateProduct(productInput *usecase.ProductInput) (*entity.Product, error) {
+func (p *Product) CreateProduct(productInput *inputs.ProductInput) (*entity.Product, error) {
 	category, err := p.getCategoryName(productInput.CategoryName)
 	if err != nil {
 		return nil, err
@@ -74,17 +77,14 @@ func (p *Product) GetProductByCategoryID(categoryID int) ([]*entity.Product, err
 	return products, nil
 }
 
-func (p *Product) UpdateProduct(productDTO *usecase.ProductInput) (*entity.Product, error) {
-	// TODO: implement-me
+func (p *Product) UpdateProduct(productDTO *inputs.ProductInput) (*entity.Product, error) {
 	return nil, nil
 }
 
 func (p *Product) DeleteProduct(productID string) error {
-	// TODO: implement-me
 	return nil
 }
 
 func (p *Product) GetCategories() ([]*entity.ProductCategory, error) {
-	// TODO: implement-me
 	return nil, nil
 }

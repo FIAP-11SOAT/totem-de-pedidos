@@ -16,4 +16,6 @@ func ProductsRouter(e *echo.Echo, dbConnection *dbadapter.DatabaseAdapter) {
 	e.PUT("/products/:id", h.UpdateProduct)
 	e.DELETE("/products/:id", h.DeleteProduct)
 	e.GET("/products/category/:id", h.GetProductByCategoryID)
+
+	e.GET("/categories/:name/products", h.ListAllCategories)
 }
