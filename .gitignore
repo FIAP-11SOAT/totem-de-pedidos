@@ -145,3 +145,4 @@ fabric.properties
 .idea/
 
 .env
+temp/

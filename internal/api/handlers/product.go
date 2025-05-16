@@ -8,10 +8,7 @@ import (
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/output"
 
-	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
-	service "github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/usecase"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories"
 	"github.com/labstack/echo/v4"
 )
 
@@ -19,11 +16,9 @@ type ProductHandler struct {
 	productService usecase.Product
 }
 
-func NewProductHandler(dbConnection *dbadapter.DatabaseAdapter) *ProductHandler {
-	productRepository := repositories.NewProductRepository(dbConnection)
-
+func NewProductHandler(productService usecase.Product) *ProductHandler {
 	return &ProductHandler{
-		productService: service.NewProductUseCase(productRepository),
+		productService: productService,
 	}
 }
 
