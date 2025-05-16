@@ -75,11 +75,34 @@ func (p *Product) GetProductByCategoryID(categoryID int) ([]*entity.Product, err
 	return products, nil
 }
 
-func (p *Product) UpdateProduct(productDTO *input.ProductInput) (*entity.Product, error) {
-	return nil, nil
+func (p *Product) UpdateProduct(id string, productInput *input.ProductInput) (*entity.Product, error) {
+	existing, err := p.productRepository.FindProductById(context.Background(), id)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching product: %w", err)
+	}
+	if existing == nil {
+		return nil, fmt.Errorf("product not found")
+	}
+
+	existing.Name = productInput.Name
+	existing.Description = productInput.Description
+	existing.Price = productInput.Price
+	existing.ImageURL = productInput.ImageURL
+	existing.CategoryID = productInput.CategoryID
+	existing.UpdatedAt = time.Now().UTC()
+
+	updated, err := p.productRepository.UpdateProduct(context.Background(), existing)
+	if err != nil {
+		return nil, fmt.Errorf("error updating product: %w", err)
+	}
+	return updated, nil
 }
 
 func (p *Product) DeleteProduct(productID string) error {
+	err := p.productRepository.DeleteProduct(context.Background(), productID)
+	if err != nil {
+		return fmt.Errorf("error deleting product: %w", err)
+	}
 	return nil
 }
 

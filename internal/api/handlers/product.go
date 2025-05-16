@@ -90,11 +90,40 @@ func (p *ProductHandler) CreateProduct(c echo.Context) error {
 }
 
 func (p *ProductHandler) UpdateProduct(c echo.Context) error {
-	return c.JSON(http.StatusInternalServerError, "")
+	id := c.Param("id")
+	if id == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Product ID is required"})
+	}
+
+	productInput := new(input.ProductInput)
+	if err := c.Bind(productInput); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	if err := productInput.Validate(); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	updatedProduct, err := p.productService.UpdateProduct(id, productInput)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, updatedProduct)
 }
 
 func (p *ProductHandler) DeleteProduct(c echo.Context) error {
-	return c.JSON(http.StatusInternalServerError, "")
+	id := c.Param("id")
+	if id == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Product ID is required"})
+	}
+
+	err := p.productService.DeleteProduct(id)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	return c.NoContent(http.StatusNoContent)
 }
 
 func (p *ProductHandler) ListAllCategories(c echo.Context) error {
