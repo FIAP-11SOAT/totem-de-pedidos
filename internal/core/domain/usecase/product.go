@@ -3,8 +3,9 @@ package usecase
 import (
 	"context"
 	"fmt"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"time"
+
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
@@ -20,7 +21,11 @@ func NewProductUseCase(repository repositories.Product) usecase.Product {
 }
 
 func (p *Product) GetProductById(id string) (*entity.Product, error) {
-	return nil, nil
+	product, err := p.productRepository.FindProductById(context.Background(), id)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching product by id: %w", err)
+	}
+	return product, nil
 }
 
 func (p *Product) GetProducts(input *input.ProductFilterInput) ([]*entity.Product, error) {
@@ -32,32 +37,25 @@ func (p *Product) GetProducts(input *input.ProductFilterInput) ([]*entity.Produc
 }
 
 func (p *Product) CreateProduct(productInput *input.ProductInput) (*entity.Product, error) {
-	category, err := p.getCategoryName(productInput.CategoryName)
-	if err != nil {
-		return nil, err
-	}
-
 	productToCreate := &entity.Product{
 		Name:            productInput.Name,
 		Description:     productInput.Description,
 		Price:           productInput.Price,
 		ImageURL:        productInput.ImageURL,
-		PreparationTime: 0,
+		PreparationTime: 0, // ajuste se necessário
 		CreatedAt:       time.Now().UTC(),
 		UpdatedAt:       time.Now().UTC(),
-		CategoryID:      category.ID,
+		CategoryID:      productInput.CategoryID,
 	}
 
 	createdProductId, err := p.productRepository.CreateProduct(context.Background(), productToCreate)
 	if err != nil {
-		return nil, fmt.Errorf("error creating product")
+		return nil, fmt.Errorf("error creating product: %w", err)
 	}
 
-	return &entity.Product{
-		ID:          createdProductId,
-		Description: productInput.Description,
-		Price:       productInput.Price,
-	}, nil
+	// Retorna o produto completo
+	productToCreate.ID = createdProductId
+	return productToCreate, nil
 }
 
 func (p *Product) getCategoryName(categoryName string) (*entity.ProductCategory, error) {
