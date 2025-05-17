@@ -45,6 +45,7 @@ func (r *categoryRepository) GetCategories(ctx context.Context) ([]*entity.Categ
 	}
 	return categories, nil
 }
+
 func (r *categoryRepository) CreateCategory(ctx context.Context, category *entity.Category) (int, error) {
 	query := `
 		INSERT INTO product_categories (name, description, created_at, updated_at)
@@ -60,7 +61,7 @@ func (r *categoryRepository) CreateCategory(ctx context.Context, category *entit
 	return id, nil
 }
 
-func (r *categoryRepository) FindCategoryById(ctx context.Context, id int) (*entity.Category, error) {
+func (r *categoryRepository) FindCategoryByID(ctx context.Context, id int) (*entity.Category, error) {
 	query := `
 		SELECT id, name, description, created_at, updated_at
 		FROM product_categories

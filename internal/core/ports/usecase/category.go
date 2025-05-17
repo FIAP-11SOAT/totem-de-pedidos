@@ -7,12 +7,8 @@ import (
 
 type Category interface {
 	GetCategories() ([]*entity.Category, error)
-
 	CreateCategory(categoryDTO *input.CategoryInput) (*entity.Category, error)
-
 	UpdateCategory(categoryDTO *entity.Category) (*entity.Category, error)
-
 	DeleteCategory(categoryID int) error
-
-	FindCategoryById(categoryID int) (*entity.Category, error)
+	FindCategoryByID(categoryID int) (*entity.Category, error)
 }

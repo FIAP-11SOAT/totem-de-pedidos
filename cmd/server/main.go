@@ -5,12 +5,12 @@ import (
 	"log"
 	"os"
 
+	"github.com/joho/godotenv"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api"
-	"github.com/joho/godotenv"
-	"github.com/labstack/echo/v4"
 )
 
 func main() {
@@ -21,12 +21,12 @@ func main() {
 	}
 
 	databaseAdapter := dbadapter.New(dbadapter.Input{
-		Db_driver:  os.Getenv("DB_DRIVER"),
-		Db_user:    os.Getenv("DB_USER"),
-		Db_pass:    os.Getenv("DB_PASS"),
-		Db_host:    os.Getenv("DB_HOST"),
-		Db_name:    os.Getenv("DB_NAME"),
-		Db_options: os.Getenv("DB_OPTIONS"),
+		DBDrive:   os.Getenv("DB_DRIVER"),
+		DBUser:    os.Getenv("DB_USER"),
+		DBPass:    os.Getenv("DB_PASS"),
+		DBHost:    os.Getenv("DB_HOST"),
+		DBName:    os.Getenv("DB_NAME"),
+		DBOptions: os.Getenv("DB_OPTIONS"),
 	})
 
 	app := echo.New()

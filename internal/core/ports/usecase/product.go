@@ -6,7 +6,7 @@ import (
 )
 
 type Product interface {
-	GetProductById(id string) (*entity.Product, error)
+	GetProductByID(id string) (*entity.Product, error)
 	GetProducts(*input.ProductFilterInput) ([]*entity.Product, error)
 	CreateProduct(productDTO *input.ProductInput) (*entity.Product, error)
 	UpdateProduct(id string, productDTO *input.ProductInput) (*entity.Product, error)

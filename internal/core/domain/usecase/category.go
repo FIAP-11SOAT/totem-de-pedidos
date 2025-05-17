@@ -35,13 +35,17 @@ func (c *Category) CreateCategory(categoryDTO *input.CategoryInput) (*entity.Cat
 		UpdatedAt:   time.Now().UTC(),
 	}
 
-	createdCategoryId, err := c.categoryRepository.CreateCategory(context.Background(), categoryToCreate)
+	createdCategoryID, err := c.categoryRepository.CreateCategory(
+		context.Background(),
+		categoryToCreate,
+	)
+
 	if err != nil {
 		return nil, fmt.Errorf("error creating category: %w", err)
 	}
 
 	return &entity.Category{
-		ID:          createdCategoryId,
+		ID:          createdCategoryID,
 		Name:        categoryDTO.Name,
 		Description: categoryDTO.Description,
 	}, nil
@@ -72,8 +76,8 @@ func (c *Category) DeleteCategory(categoryID int) error {
 	return nil
 }
 
-func (c *Category) FindCategoryById(categoryID int) (*entity.Category, error) {
-	category, err := c.categoryRepository.FindCategoryById(context.Background(), categoryID)
+func (c *Category) FindCategoryByID(categoryID int) (*entity.Category, error) {
+	category, err := c.categoryRepository.FindCategoryByID(context.Background(), categoryID)
 	if err != nil {
 		return nil, fmt.Errorf("error finding category: %w", err)
 	}

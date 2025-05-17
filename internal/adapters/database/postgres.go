@@ -16,12 +16,12 @@ type DatabaseAdapter struct {
 }
 
 type Input struct {
-	Db_driver  string
-	Db_user    string
-	Db_pass    string
-	Db_host    string
-	Db_name    string
-	Db_options string
+	DBDrive   string
+	DBUser    string
+	DBPass    string
+	DBHost    string
+	DBName    string
+	DBOptions string
 }
 
 func New(input Input) *DatabaseAdapter {
@@ -29,12 +29,12 @@ func New(input Input) *DatabaseAdapter {
 	defer cancel()
 
 	connStr := fmt.Sprintf("%s://%s:%s@%s/%s%s",
-		input.Db_driver,
-		input.Db_user,
-		url.QueryEscape(input.Db_pass),
-		input.Db_host,
-		input.Db_name,
-		input.Db_options,
+		input.DBDrive,
+		input.DBUser,
+		url.QueryEscape(input.DBPass),
+		input.DBHost,
+		input.DBName,
+		input.DBOptions,
 	)
 
 	fmt.Println("********************", connStr)

@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
-
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
 )
@@ -20,8 +19,8 @@ func NewProductUseCase(repository repositories.Product) usecase.Product {
 	return &Product{productRepository: repository}
 }
 
-func (p *Product) GetProductById(id string) (*entity.Product, error) {
-	product, err := p.productRepository.FindProductById(context.Background(), id)
+func (p *Product) GetProductByID(id string) (*entity.Product, error) {
+	product, err := p.productRepository.FindProductByID(context.Background(), id)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching product by id: %w", err)
 	}
@@ -48,18 +47,25 @@ func (p *Product) CreateProduct(productInput *input.ProductInput) (*entity.Produ
 		CategoryID:      productInput.CategoryID,
 	}
 
-	createdProductId, err := p.productRepository.CreateProduct(context.Background(), productToCreate)
+	createdProductID, err := p.productRepository.CreateProduct(
+		context.Background(),
+		productToCreate,
+	)
+
 	if err != nil {
 		return nil, fmt.Errorf("error creating product: %w", err)
 	}
 
-	// Retorna o produto completo
-	productToCreate.ID = createdProductId
+	productToCreate.ID = createdProductID
 	return productToCreate, nil
 }
 
 func (p *Product) getCategoryName(categoryName string) (*entity.ProductCategory, error) {
-	category, err := p.productRepository.GetCategoryByName(context.Background(), categoryName)
+	category, err := p.productRepository.GetCategoryByName(
+		context.Background(),
+		categoryName,
+	)
+
 	if err != nil {
 		return nil, fmt.Errorf("category not found")
 	}
@@ -76,7 +82,7 @@ func (p *Product) GetProductByCategoryID(categoryID int) ([]*entity.Product, err
 }
 
 func (p *Product) UpdateProduct(id string, productInput *input.ProductInput) (*entity.Product, error) {
-	existing, err := p.productRepository.FindProductById(context.Background(), id)
+	existing, err := p.productRepository.FindProductByID(context.Background(), id)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching product: %w", err)
 	}

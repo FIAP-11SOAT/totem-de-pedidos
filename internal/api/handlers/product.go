@@ -7,7 +7,6 @@ import (
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/output"
-
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
 	"github.com/labstack/echo/v4"
 )
@@ -47,13 +46,13 @@ func (p *ProductHandler) ListAllProducts(c echo.Context) error {
 	return c.JSON(http.StatusOK, resultProducts)
 }
 
-func (p *ProductHandler) FindProductById(c echo.Context) error {
+func (p *ProductHandler) FindProductByID(c echo.Context) error {
 	id := c.Param("id")
 	if id == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Product ID is required"})
 	}
 
-	product, err := p.productService.GetProductById(id)
+	product, err := p.productService.GetProductByID(id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
@@ -61,7 +60,7 @@ func (p *ProductHandler) FindProductById(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, map[string]string{"error": "Product not found"})
 	}
 
-	return c.JSON(http.StatusOK, product)
+	return c.JSON(http.StatusOK, mapper.MapProductToOutput(product))
 }
 
 func (p *ProductHandler) CreateProduct(c echo.Context) error {

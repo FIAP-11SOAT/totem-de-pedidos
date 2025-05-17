@@ -4,11 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
-
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
 	service "github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/usecase"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories"
 	"github.com/labstack/echo/v4"
@@ -40,14 +39,14 @@ func (c *CategoryHandler) ListAllCategories(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, categories)
 }
 
-func (c *CategoryHandler) FindCategoryById(ctx echo.Context) error {
+func (c *CategoryHandler) FindCategoryByID(ctx echo.Context) error {
 	categoryID, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		ctx.Logger().Error("Error converting category ID", err)
 		return ctx.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid category ID"})
 	}
 
-	category, err := c.categoryService.FindCategoryById(categoryID)
+	category, err := c.categoryService.FindCategoryByID(categoryID)
 	if err != nil {
 		ctx.Logger().Error("Error finding category", err)
 		return ctx.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})

@@ -1,14 +1,15 @@
 # Golang Check Vuln Dependencies
 code-quality:
 	go mod verify
-	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
-	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./...
-	go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest run ./...
-	go run github.com/securego/gosec/v2/cmd/gosec@latest ./...
+	go tool govulncheck ./...
+	go tool golangci-lint run ./...
 
 # Golang Start
 start:
 	go run cmd/server/main.go
+
+dev:
+	go tool air
 
 # Golang Update Dependencies
 update:

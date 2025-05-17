@@ -14,7 +14,7 @@ func ProductsRouter(e *echo.Echo, dbConnection *dbadapter.DatabaseAdapter) {
 	h := handlers.NewProductHandler(u)
 
 	e.GET("/products", h.ListAllProducts)
-	e.GET("/products/:id", h.FindProductById)
+	e.GET("/products/:id", h.FindProductByID)
 	e.POST("/products", h.CreateProduct)
 	e.PUT("/products/:id", h.UpdateProduct)
 	e.DELETE("/products/:id", h.DeleteProduct)
