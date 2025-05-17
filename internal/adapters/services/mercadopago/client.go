@@ -4,62 +4,47 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago/request"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago/response"
 )
 
-type Items struct {
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Category    string `json:"category"`
-	Quantity    int    `json:"quantity"`
-	UnitMeasure string `json:"unit_measure"`
-	UnitPrice   string `json:"unit_price"`
-	TotalAmount string `json:"total_amount"`
+var client = &http.Client{}
+
+type Store struct {
+	AccessToken string
 }
 
-type DynamicQRRequest struct {
-	Title             string  `json:"title"`
-	Description       string  `json:"description"`
-	ExternalReference string  `json:"external_reference"`
-	NotificationURL   string  `json:"notification_url"`
-	TotalAmount       float64 `json:"total_amount"`
-}
-
-type DynamicQRResponse struct{}
-
-type CreateDynamicQRInput struct {
-	UserID        string
-	ExternalPosID string
-	Payload       DynamicQRRequest
-}
-
-func CreateDynamicQR(input CreateDynamicQRInput) (string, error) {
+func (s *Store) CreateDynamicQR(input *request.CreateDynamicQRInput) (response.DynamicQRResponse, error) {
 	endpoint := fmt.Sprintf(
 		"https://api.mercadopago.com/instore/orders/qr/seller/collectors/%s/pos/%s/qrs",
 		input.UserID,
 		input.ExternalPosID,
 	)
 
+	respObj := response.DynamicQRResponse{}
 	content, err := json.Marshal(input.Payload)
 	if err != nil {
-		return "", err
+		return respObj, err
 	}
 
-	// #nosec G107
-	resp, err := http.Post(endpoint, "application/json", bytes.NewReader(content))
+	req, err := http.NewRequest("POST", endpoint, bytes.NewReader(content))
 	if err != nil {
-		return "", err
+		return respObj, err
 	}
-	defer func() {
-		if err := resp.Body.Close(); err != nil {
-			log.Printf("error closing response body: %v", err)
-		}
-	}()
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.AccessToken))
+	req.Header.Set("Content-Type", "application/json")
 
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("failed to create dynamic QR code: %s", resp.Status)
+	resp, err := client.Do(req)
+	if err != nil {
+		return respObj, err
+	}
+	defer resp.Body.Close()
+
+	if err := json.NewDecoder(resp.Body).Decode(&respObj); err != nil {
+		return respObj, err
 	}
 
-	return resp.Request.URL.String(), nil
+	return respObj, nil
 }
