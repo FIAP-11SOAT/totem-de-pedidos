@@ -28,6 +28,8 @@ services:
     image: postgres:16-alpine
     ports:
       - "5432:5432"
+    volumes:
+      - totempedidos-db:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=totempedidos
       - POSTGRES_PASSWORD=totempedidos
@@ -58,3 +60,6 @@ services:
 
 networks:
   totempedidos-network:
+
+volumes:
+  totempedidos-db:

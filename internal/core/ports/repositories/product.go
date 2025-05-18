@@ -4,11 +4,12 @@ import (
 	"context"
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 )
 
 type Product interface {
-	ListProducts(ctx context.Context, description string) ([]*entity.Product, error)
-	FindProductById(ctx context.Context, id string) (*entity.Product, error)
+	ListProducts(ctx context.Context, input *input.ProductFilterInput) ([]*entity.Product, error)
+	FindProductByID(ctx context.Context, id string) (*entity.Product, error)
 	CreateProduct(ctx context.Context, product *entity.Product) (int, error)
 	GetCategoryByName(ctx context.Context, categoryName string) (*entity.ProductCategory, error)
 	GetCategories(ctx context.Context) ([]*entity.ProductCategory, error)

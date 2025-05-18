@@ -28,6 +28,7 @@ RUN npm run compile
 
 # Image
 FROM gcr.io/distroless/static-debian12 AS production
+ENV PROFILE=prod
 WORKDIR /service
 USER nonroot:nonroot
 COPY --from=docs /docs/schema ./docs/schema

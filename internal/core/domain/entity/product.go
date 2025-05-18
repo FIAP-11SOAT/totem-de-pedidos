@@ -11,13 +11,13 @@ type ProductCategory struct {
 }
 
 type Product struct {
-	ID              int     `json:"id"`
-	Name            string  `json:"nome"`
-	Description     string  `json:"descricao"`
-	Price           float64 `json:"preco"`
-	ImageURL        string  `json:"imagem"`
-	PreparationTime int     `json:"preparation_time"`
+	ID              int
+	Name            string
+	Description     string
+	Price           float64
+	ImageURL        string
+	PreparationTime int
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
-	CategoryID      int `json:"categoriaId"`
+	CategoryID      int
 }

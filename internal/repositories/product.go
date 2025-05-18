@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
+
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
-	"github.com/jackc/pgx/v5"
 )
 
 type productRepository struct {
@@ -20,14 +22,31 @@ func NewProductRepository(database *dbadapter.DatabaseAdapter) repositories.Prod
 	}
 }
 
-func (p *productRepository) ListProducts(ctx context.Context, description string) ([]*entity.Product, error) {
+func (p *productRepository) ListProducts(ctx context.Context, input *input.ProductFilterInput) ([]*entity.Product, error) {
 	query := `
-		SELECT id, name, description, price, image_url, preparation_time, created_at, updated_at, category_id
-		FROM products
-		WHERE description ILIKE $1
-	`
+        SELECT p.id, p.name, p.description, p.price, p.image_url, p.preparation_time, p.created_at, p.updated_at, p.category_id
+        FROM products p
+        JOIN product_categories pc ON p.category_id = pc.id
+    `
+	var args []interface{}
+	where := ""
 
-	rows, err := p.sqlClient.Query(ctx, query, "%"+description+"%")
+	if input.Name != "" {
+		args = append(args, "%"+input.Name+"%")
+		where += fmt.Sprintf("p.name ILIKE $%d", len(args))
+	}
+	if input.CategoryName != "" {
+		if where != "" {
+			where += " AND "
+		}
+		args = append(args, "%"+input.CategoryName+"%")
+		where += fmt.Sprintf("pc.name ILIKE $%d", len(args))
+	}
+	if where != "" {
+		query += " WHERE " + where
+	}
+
+	rows, err := p.sqlClient.Query(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +79,7 @@ func (p *productRepository) ListProducts(ctx context.Context, description string
 	return products, nil
 }
 
-func (p *productRepository) FindProductById(ctx context.Context, id string) (*entity.Product, error) {
+func (p *productRepository) FindProductByID(ctx context.Context, id string) (*entity.Product, error) {
 	query := `
 		SELECT id, name, description, price, image_url, preparation_time, created_at, updated_at, category_id
 		FROM products
@@ -81,9 +100,11 @@ func (p *productRepository) FindProductById(ctx context.Context, id string) (*en
 	)
 
 	if err != nil {
+
 		if err == pgx.ErrNoRows {
 			return nil, nil
 		}
+
 		return nil, err
 	}
 
@@ -91,10 +112,15 @@ func (p *productRepository) FindProductById(ctx context.Context, id string) (*en
 }
 
 func (p *productRepository) CreateProduct(ctx context.Context, product *entity.Product) (int, error) {
-	var createdProductId int
+	var createdProductID int
 
-	err := p.sqlClient.QueryRow(ctx, createProductQuery(),
-		product.ID,
+	query := `
+		INSERT INTO products (name, description, price, image_url, preparation_time, created_at, updated_at, category_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		RETURNING id
+	`
+
+	err := p.sqlClient.QueryRow(ctx, query,
 		product.Name,
 		product.Description,
 		product.Price,
@@ -103,12 +129,12 @@ func (p *productRepository) CreateProduct(ctx context.Context, product *entity.P
 		product.CreatedAt,
 		product.UpdatedAt,
 		product.CategoryID,
-	).Scan(&createdProductId)
+	).Scan(&createdProductID)
 	if err != nil {
 		return 0, err
 	}
 
-	return createdProductId, nil
+	return createdProductID, nil
 }
 
 func (p *productRepository) GetProductsByCategoryID(ctx context.Context, categoryID int) ([]*entity.Product, error) {
