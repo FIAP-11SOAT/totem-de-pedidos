@@ -13,11 +13,21 @@ import (
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api"
 )
 
+func getEnvOrDefault(key, fallback string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return fallback
+}
+
 func main() {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	isProduction := getEnvOrDefault("PROFILE", "dev") == "prod"
+	if !isProduction {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
 	}
 
 	databaseAdapter := dbadapter.New(dbadapter.Input{
