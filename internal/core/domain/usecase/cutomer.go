@@ -35,12 +35,12 @@ func (p *Customer) CreateCustomer(customerDTO *usecase.CustomerInput) (*entity.C
 	return customerResponse, nil
 }
 
-func (p *Customer) IdentifyCustomer(taxId *string) (*entity.Customer, error) {
-	if !cpfcnpj.ValidateCPF(*taxId) {
+func (p *Customer) IdentifyCustomer(taxID *string) (*entity.Customer, error) {
+	if !cpfcnpj.ValidateCPF(*taxID) {
 		return nil, fmt.Errorf("CPF inválido")
 	}
 
-	customerResponse, err := p.CustomerRepository.IdentifyCustomer(taxId)
+	customerResponse, err := p.CustomerRepository.IdentifyCustomer(taxID)
 	if err != nil {
 		return nil, fmt.Errorf("error getting customer")
 	}

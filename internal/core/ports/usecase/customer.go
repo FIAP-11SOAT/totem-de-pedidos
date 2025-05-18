@@ -13,5 +13,5 @@ type CustomerInput struct {
 
 type Customer interface {
 	CreateCustomer(customerDTO *CustomerInput) (*entity.Customer, error)
-	IdentifyCustomer(taxId *string) (*entity.Customer, error)
+	IdentifyCustomer(taxID *string) (*entity.Customer, error)
 }
