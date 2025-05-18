@@ -5,11 +5,11 @@ import (
 	"log"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4/middleware"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api"
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
@@ -32,7 +32,8 @@ func main() {
 	app := echo.New()
 	app.Use(middleware.CORS())
 	app.Use(middleware.Recover())
-	//app.Use(middleware.Logger())
+	app.Use(middleware.Logger())
 	api.Routers(app, databaseAdapter)
-	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
+
+	app.Logger.Info(app.Start(fmt.Sprintf(":%s", os.Getenv("SERVER_PORT"))))
 }
