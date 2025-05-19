@@ -44,5 +44,5 @@ func main() {
 	app.Use(middleware.Logger())
 	api.Routers(app, databaseAdapter)
 
-	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
+	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("SERVER_PORT"))))
 }
