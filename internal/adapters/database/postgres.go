@@ -11,6 +11,9 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// TODO: implementar pool
+// TODO: implementar abstração para transaction
+
 type DatabaseAdapter struct {
 	Client *pgx.Conn
 }
@@ -36,8 +39,6 @@ func New(input Input) *DatabaseAdapter {
 		input.DBName,
 		input.DBOptions,
 	)
-
-	fmt.Println("********************", connStr)
 
 	client, err := pgx.Connect(ctx, connStr)
 	if err != nil {
