@@ -7,10 +7,11 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	middleware_echo "github.com/labstack/echo/v4/middleware"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/middleware"
 )
 
 func getEnvOrDefault(key, fallback string) string {
@@ -40,8 +41,9 @@ func main() {
 	})
 
 	app := echo.New()
-	app.Use(middleware.CORS())
-	app.Use(middleware.Recover())
+	app.HTTPErrorHandler = middleware.CustomHTTPErrorHandler
+	app.Use(middleware_echo.CORS())
+	app.Use(middleware_echo.Recover())
 	//app.Use(middleware.Logger())
 	api.Routers(app, databaseAdapter)
 	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))

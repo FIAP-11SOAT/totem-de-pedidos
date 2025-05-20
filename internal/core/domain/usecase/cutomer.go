@@ -3,10 +3,11 @@ package usecase
 import (
 	"fmt"
 
+	"github.com/klassmann/cpfcnpj"
+
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
-	"github.com/klassmann/cpfcnpj"
 )
 
 type Customer struct {
