@@ -17,18 +17,6 @@ import (
 func TestCreateProduct(t *testing.T) {
 	connStr := tests.CreatePostgresDataBase(t)
 
-	// TODO: fix
-	// dbConnection := dbadapter.New(
-	// 	dbadapter.Input{
-	// 		Db_driver:  "postgres",
-	// 		Db_user:    "totempedidos",
-	// 		Db_pass:    "totempedidos",
-	// 		Db_host:    "totempedidos",
-	// 		Db_name:    "totempedidos",
-	// 		Db_options: "?sslmode=disable",
-	// 	},
-	// )
-
 	client, err := pgx.Connect(context.Background(), connStr)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connection to database: %v\n", err)

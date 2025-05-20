@@ -21,7 +21,6 @@ func getEnvOrDefault(key, fallback string) string {
 }
 
 func main() {
-
 	isProduction := getEnvOrDefault("PROFILE", "dev") == "prod"
 	if !isProduction {
 		err := godotenv.Load()
@@ -42,7 +41,8 @@ func main() {
 	app := echo.New()
 	app.Use(middleware.CORS())
 	app.Use(middleware.Recover())
-	//app.Use(middleware.Logger())
+	app.Use(middleware.Logger())
 	api.Routers(app, databaseAdapter)
-	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
+
+	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("SERVER_PORT"))))
 }

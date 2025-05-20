@@ -1,12 +1,12 @@
 package payment
 
-type CreatePixInput struct {
+type PaymentInput struct {
 	Amount  float64
 	Email   string
 	OrderID string
 }
 
-type CreatePixOutput struct {
+type PaymentOutput struct {
 	ResultOrderID   string
 	ResultPaymentID string
 	CheckoutURL     string
