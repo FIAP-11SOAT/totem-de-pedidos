@@ -49,7 +49,7 @@ func (o *order) CreateOrder(input entity.Order) (int, error) {
 	}
 
 	input.TotalAmount = total
-	input.Status = "PENDING"
+	input.Status = "PAYMENT_PENDING"
 
 	orderId, err := o.orderRepo.CreateOrder(input)
 	if err != nil {
@@ -68,6 +68,21 @@ func (o *order) GetOrderByID(id int) (entity.Order, error) {
 }
 
 func (o *order) ListOrders(filter input.OrderFilterInput) ([]entity.Order, error) {
+	if filter.CustomerID != nil {
+		orders, err := o.orderRepo.ListOrders(filter)
+		if err != nil {
+			return []entity.Order{}, nil
+		}
+
+		for i := range orders {
+			for j := range orders[i].Items {
+				orders[i].Items[j].Price = orders[i].Items[j].Price * 0.95 // aplica 5% de desconto para o cliente
+			}
+		}
+
+		return orders, nil
+	}
+
 	return o.orderRepo.ListOrders(filter)
 }
 
@@ -80,5 +95,5 @@ func (o *order) Checkout(orderID int) error {
 		return errors.New("payment failed")
 	}
 
-	return o.orderRepo.UpdateStatus(orderID, "PAYMENT_APPROVED")
+	return o.orderRepo.UpdateStatus(orderID, "PAYMENT_RECEIVED")
 }
