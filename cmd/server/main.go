@@ -41,9 +41,11 @@ func main() {
 
 	app := echo.New()
 	app.Logger.SetLevel(log.INFO)
+
 	app.Use(middlewareecho.CORS())
 	app.Use(middlewareecho.Recover())
-	//app.Use(middleware.Logger())
+
 	api.Routers(app, databaseAdapter)
+
 	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }
