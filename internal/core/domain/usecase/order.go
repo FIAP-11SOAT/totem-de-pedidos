@@ -75,9 +75,7 @@ func (o *order) ListOrders(filter input.OrderFilterInput) ([]entity.Order, error
 		}
 
 		for i := range orders {
-			for j := range orders[i].Items {
-				orders[i].Items[j].Price = orders[i].Items[j].Price * 0.95 // aplica 5% de desconto para o cliente
-			}
+			orders[i].TotalAmount = orders[i].TotalAmount * 0.95 // aplica 5% de desconto para o cliente
 		}
 
 		return orders, nil

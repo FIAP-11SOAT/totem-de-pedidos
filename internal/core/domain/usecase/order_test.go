@@ -172,9 +172,62 @@ func TestGetOrderByID(t *testing.T) {
 }
 
 func TestListOrders(t *testing.T) {
+	t.Run("should return list of orders without disscount", func(t *testing.T) {
+		expected := []entity.Order{
+			{ID: 1, TotalAmount: 47.5, CustomerID: 1},
+			{ID: 2, TotalAmount: 95.0, CustomerID: 1},
+			{ID: 3, TotalAmount: 950.0, CustomerID: 1},
+		}
+
+		orderRepo := mock.NewOrderRepositoryMock()
+		orderRepo.ListOrdersFunc = func(filter input.OrderFilterInput) ([]entity.Order, error) {
+			return []entity.Order{
+				{ID: 1, TotalAmount: 50, CustomerID: 1},
+				{ID: 2, TotalAmount: 100, CustomerID: 1},
+				{ID: 3, TotalAmount: 1000, CustomerID: 1},
+			}, nil
+		}
+		productRepo := mock.NewProductRepositoryMock()
+		paymentMock := paymentmock.NewPaymentServiceMock()
+
+		uc := usecase.NewOrderUseCase(orderRepo, productRepo, paymentMock)
+
+		result, err := uc.ListOrders(input.OrderFilterInput{})
+		
+		assert.NoError(t, err)
+		assert.NotEqual(t, expected, result)
+	})
+
+	t.Run("should return list of orders successfully applying disscount", func(t *testing.T) {
+		expected := []entity.Order{
+			{ID: 1, TotalAmount: 47.5, CustomerID: 1},
+			{ID: 2, TotalAmount: 95.0, CustomerID: 1},
+			{ID: 3, TotalAmount: 950.0, CustomerID: 1},
+		}
+
+		orderRepo := mock.NewOrderRepositoryMock()
+		orderRepo.ListOrdersFunc = func(filter input.OrderFilterInput) ([]entity.Order, error) {
+			return []entity.Order{
+				{ID: 1, TotalAmount: 50, CustomerID: 1},
+				{ID: 2, TotalAmount: 100, CustomerID: 1},
+				{ID: 3, TotalAmount: 1000, CustomerID: 1},
+			}, nil
+		}
+		productRepo := mock.NewProductRepositoryMock()
+		paymentMock := paymentmock.NewPaymentServiceMock()
+
+		uc := usecase.NewOrderUseCase(orderRepo, productRepo, paymentMock)
+
+		id := 1
+		result, err := uc.ListOrders(input.OrderFilterInput{CustomerID: &id})
+		
+		assert.NoError(t, err)
+		assert.Equal(t, expected, result)
+	})
+
 	t.Run("should return list of orders successfully", func(t *testing.T) {
 		expected := []entity.Order{
-			{ID: 1, Status: "PENDING", CustomerID: 10},
+			{ID: 1, Status: "PAYMENT_PENDING", CustomerID: 10},
 			{ID: 2, Status: "COMPLETED", CustomerID: 10},
 		}
 
@@ -187,7 +240,7 @@ func TestListOrders(t *testing.T) {
 
 		uc := usecase.NewOrderUseCase(orderRepo, productRepo, paymentMock)
 
-		result, err := uc.ListOrders(input.OrderFilterInput{Status: "PENDING"})
+		result, err := uc.ListOrders(input.OrderFilterInput{Status: "PAYMENT_PENDING"})
 
 		assert.NoError(t, err)
 		assert.Equal(t, expected, result)
@@ -210,10 +263,10 @@ func TestListOrders(t *testing.T) {
 }
 
 func TestCheckout(t *testing.T) {
-	t.Run("should update status to PAYMENT_APPROVED when payment succeeds", func(t *testing.T) {
+	t.Run("should update status to PAYMENT_RECEIVED when payment succeeds", func(t *testing.T) {
 		orderRepo := mock.NewOrderRepositoryMock()
 		orderRepo.UpdateStatusFunc = func(id int, status string) error {
-			assert.Equal(t, "PAYMENT_APPROVED", status)
+			assert.Equal(t, "PAYMENT_RECEIVED", status)
 			return nil
 		}
 		paymentMock := paymentmock.NewPaymentServiceMock()
