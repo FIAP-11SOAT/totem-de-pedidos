@@ -2,16 +2,15 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
-	middleware_echo "github.com/labstack/echo/v4/middleware"
+	middlewareecho "github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/gommon/log"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/middleware"
 )
 
 func getEnvOrDefault(key, fallback string) string {
@@ -41,9 +40,9 @@ func main() {
 	})
 
 	app := echo.New()
-	app.HTTPErrorHandler = middleware.CustomHTTPErrorHandler
-	app.Use(middleware_echo.CORS())
-	app.Use(middleware_echo.Recover())
+	app.Logger.SetLevel(log.INFO)
+	app.Use(middlewareecho.CORS())
+	app.Use(middlewareecho.Recover())
 	//app.Use(middleware.Logger())
 	api.Routers(app, databaseAdapter)
 	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
