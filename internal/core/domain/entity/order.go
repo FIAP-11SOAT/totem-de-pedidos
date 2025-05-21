@@ -3,14 +3,14 @@ package entity
 import "time"
 
 type Order struct {
-	ID          int
-	OrderDate   time.Time
-	Status      string
-	TotalAmount float64
-	CreatedAt   time.Time
-	CustomerID  int
-	Customer    *Customer
-	Items       []OrderItem
+	ID                   int
+	OrderDate            time.Time
+	NotificationAttempts int
+	Status               string
+	TotalAmount          float64
+	CreatedAt            time.Time
+	CustomerID           int
+	Items                []OrderItem
 }
 
 type OrderItem struct {
@@ -20,5 +20,4 @@ type OrderItem struct {
 	CreatedAt time.Time
 	OrderID   int
 	ProductID int
-	Product   *Product
 }

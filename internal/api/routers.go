@@ -14,3 +14,4 @@ func Routers(e *echo.Echo, dbConnection *dbadapter.DatabaseAdapter) {
 	routers.CategoryRouter(e, dbConnection)
 	routers.PaymentsRouter(e, dbConnection)
 }
+
