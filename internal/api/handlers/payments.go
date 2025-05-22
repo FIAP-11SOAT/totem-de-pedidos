@@ -1,11 +1,14 @@
 package handlers
 
 import (
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
+	"fmt"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
+
 	"github.com/labstack/echo/v4"
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/helper"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/dto"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
 )
 
@@ -22,76 +25,67 @@ func NewPaymentHandler(paymentService usecase.Payments) *PaymentHandler {
 func (h *PaymentHandler) GetByID(c echo.Context) error {
 	paymentID := c.Param("id")
 	if paymentID == "" {
-		return c.JSON(400, helper.HttpResponse{
-			Message: "Payment ID is required",
-		})
+		return c.JSON(400, dto.HttpResponse{Message: "Payment ID is required"})
 	}
+
 	payment, err := h.paymentService.GetPaymentByID(paymentID)
 	if err != nil {
-		c.Logger().Error(helper.LoggerInfo{
-			Scope:   "get:payment:id",
-			Message: "Failed to get payment by ID",
-		})
-		return c.JSON(500, helper.HttpResponse{
-			Message: "Internal server error",
-		})
+		c.Logger().Error(dto.LoggerInfo{Scope: "get:payment:id", Message: "Failed to get payment by ID"})
+		return c.JSON(500, dto.HttpResponse{Message: "Internal server error"})
 	}
+
 	return c.JSON(200, mapper.MapPaymentToOutput(payment))
 }
 
+func (h *PaymentHandler) CreatePayment(c echo.Context) error {
+	var data input.CreatePaymentInput
+	if err := c.Bind(&data); err != nil {
+		c.Logger().Error(dto.LoggerInfo{Scope: "post:payment", Message: "Failed to bind payment input"})
+		return c.JSON(400, dto.HttpResponse{Message: "Invalid input"})
+	}
+
+	payment, err := h.paymentService.CreatePayment(data)
+	if err != nil {
+		c.Logger().Error(dto.LoggerInfo{Scope: "post:payment", Message: "Failed to create payment"})
+		return c.JSON(500, dto.HttpResponse{Message: "Internal server error"})
+	}
+
+	return c.JSON(200, payment)
+}
+
 func (h *PaymentHandler) PaymentWebHook(c echo.Context) error {
+
+	var queryType = c.QueryParam("type")
+	if queryType != "payment" {
+		return c.JSON(202, dto.HttpResponse{Message: "Invalid Params Type"})
+	}
+
+	// Ambiente de desenvolvimento nao fornece a assinatura correta somente na simulaçao do webhook na pagina
 	//isValid := mercadopago.CheckWebhookSignature(mercadopago.CheckWebhookSignatureInput{
 	//	XSignature: c.Request().Header.Get("X-Signature"),
 	//	XRequestId: c.Request().Header.Get("X-Request-Id"),
 	//	DataID:     c.QueryParam("data.id"),
 	//	Secret:     os.Getenv("MP_WEBHOOK_SECRET"),
 	//})
-	//
 	//if !isValid {
-	//	c.Logger().Error(helper.LoggerInfo{
-	//		Scope:   "post:payment:webhook",
-	//		Message: "Invalid webhook signature",
-	//	})
-	//	return c.NoContent(401)
+	//	c.Logger().Error(dto.LoggerInfo{Scope: "post:payment:webhook", Message: "Invalid webhook signature"})
+	//	return c.NoContent(202)
 	//}
 
-	c.Logger().Info(helper.LoggerInfo{
-		Scope:   "post:payment:webhook",
-		Message: "Webhook payload received",
-	})
-	var content map[string]interface{}
-	if err := c.Bind(&content); err != nil {
-		c.Logger().Error(helper.LoggerInfo{
-			Scope:   "post:payment:webhook",
-			Message: "Failed to bind webhook content",
-		})
-		return c.NoContent(400)
+	var payload mercadopago.WebhookPayload
+	if err := c.Bind(&payload); err != nil {
+		fmt.Println(err)
+		c.Logger().Error(dto.LoggerInfo{Scope: "post:payment:webhook", Message: "Failed to bind webhook payload"})
+		return c.NoContent(202)
 	}
 
-	payload := new(mercadopago.WebhookPayload)
-	if err := c.Bind(payload); err != nil {
-		c.Logger().Error(helper.LoggerInfo{
-			Scope:   "post:payment:webhook",
-			Message: "Failed to bind webhook payload",
-		})
-		return c.NoContent(400)
-	}
-
-	err := h.paymentService.PaymentWebHook(payload)
+	err := h.paymentService.PaymentWebHook(&payload)
 	if err != nil {
-		c.Logger().Error(helper.LoggerInfo{
-			Scope:   "post:payment:webhook",
-			Message: "Failed to process webhook payload",
-		})
-		return c.NoContent(500)
+		c.Logger().Error(dto.LoggerInfo{Scope: "post:payment:webhook", Message: "Failed to process webhook payload"})
+		return c.NoContent(202)
 	}
 
-	c.Logger().Info(payload)
-	c.Logger().Info(helper.LoggerInfo{
-		Scope:   "post:payment:webhook",
-		Message: "Webhook payload processed successfully",
-	})
-	return c.JSON(200, helper.HttpResponse{
+	return c.JSON(200, dto.HttpResponse{
 		Message: "Webhook processed successfully",
 	})
 }

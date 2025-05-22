@@ -9,7 +9,6 @@ import (
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/service"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/services/payment"
 )
 
 type order struct {
@@ -21,12 +20,10 @@ type order struct {
 func NewOrderUseCase(
 	orderRepo repositories.Order,
 	productRepo repositories.Product,
-	paymentService service.PaymentService,
 ) *order {
 	return &order{
-		orderRepo:      orderRepo,
-		productRepo:    productRepo,
-		paymentService: paymentService,
+		orderRepo:   orderRepo,
+		productRepo: productRepo,
 	}
 }
 
@@ -49,7 +46,7 @@ func (o *order) CreateOrder(input entity.Order) (int, error) {
 	}
 
 	input.TotalAmount = total
-	input.Status = "PAYMENT_PENDING"
+	input.Status = entity.OrderStatusPaymentPending
 
 	orderId, err := o.orderRepo.CreateOrder(input)
 	if err != nil {
@@ -59,7 +56,7 @@ func (o *order) CreateOrder(input entity.Order) (int, error) {
 	return orderId, err
 }
 
-func (o *order) UpdateOrderStatus(id int, status string) error {
+func (o *order) UpdateOrderStatus(id int, status entity.OrderStatus) error {
 	return o.orderRepo.UpdateStatus(id, status)
 }
 
@@ -82,16 +79,4 @@ func (o *order) ListOrders(filter input.OrderFilterInput) ([]entity.Order, error
 	}
 
 	return o.orderRepo.ListOrders(filter)
-}
-
-func (o *order) Checkout(orderID int) error {
-	// TODO: deverá usar transaction no caso de uso quando serviço de pagamento for implementado
-	// por hora o serviço de pagamento esta "mockado" e sempre retorna sucesso
-
-	_, err := o.paymentService.Payment(payment.PaymentInput{})
-	if err != nil {
-		return errors.New("payment failed")
-	}
-
-	return o.orderRepo.UpdateStatus(orderID, "PAYMENT_RECEIVED")
 }

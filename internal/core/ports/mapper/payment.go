@@ -10,7 +10,7 @@ func MapPaymentToOutput(payment *entity.Payment) output.PaymentOutput {
 		ID:          payment.ID,
 		Amount:      payment.Amount,
 		PaymentDate: payment.PaymentDate,
-		Status:      payment.Status,
+		Status:      string(payment.Status),
 		Provider:    payment.Provider,
 	}
 	return out

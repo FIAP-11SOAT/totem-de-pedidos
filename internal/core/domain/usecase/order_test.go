@@ -8,8 +8,6 @@ import (
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/usecase"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/services/payment"
-	paymentmock "github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/services/payment/mock"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories/mock"
 	"github.com/stretchr/testify/assert"
 )
@@ -31,9 +29,7 @@ func TestCreateOrder(t *testing.T) {
 			return 123, nil
 		}
 
-		paymentMock := paymentmock.NewPaymentServiceMock()
-
-		orderUc := usecase.NewOrderUseCase(orderMock, productMock, paymentMock)
+		orderUc := usecase.NewOrderUseCase(orderMock, productMock)
 
 		order := entity.Order{
 			CustomerID: 1,
@@ -52,7 +48,6 @@ func TestCreateOrder(t *testing.T) {
 		orderUc := usecase.NewOrderUseCase(
 			mock.NewOrderRepositoryMock(),
 			mock.NewProductRepositoryMock(),
-			paymentmock.NewPaymentServiceMock(),
 		)
 
 		order := entity.Order{
@@ -74,9 +69,7 @@ func TestCreateOrder(t *testing.T) {
 			return nil, errors.New("product not found")
 		}
 
-		paymentMock := paymentmock.NewPaymentServiceMock()
-
-		orderUc := usecase.NewOrderUseCase(orderMock, productMock, paymentMock)
+		orderUc := usecase.NewOrderUseCase(orderMock, productMock)
 
 		order := entity.Order{
 			CustomerID: 1,
@@ -101,9 +94,7 @@ func TestUpdateOrderStatus(t *testing.T) {
 			return nil
 		}
 
-		paymentMock := paymentmock.NewPaymentServiceMock()
-
-		uc := usecase.NewOrderUseCase(orderMock, productMock, paymentMock)
+		uc := usecase.NewOrderUseCase(orderMock, productMock)
 
 		err := uc.UpdateOrderStatus(1, "COMPLETED")
 		assert.NoError(t, err)
@@ -117,9 +108,7 @@ func TestUpdateOrderStatus(t *testing.T) {
 			return errors.New("order not found")
 		}
 
-		paymentMock := paymentmock.NewPaymentServiceMock()
-
-		uc := usecase.NewOrderUseCase(orderMock, productMock, paymentMock)
+		uc := usecase.NewOrderUseCase(orderMock, productMock)
 
 		err := uc.UpdateOrderStatus(99999, "CANCELLED")
 		assert.Error(t, err)
@@ -145,9 +134,8 @@ func TestGetOrderByID(t *testing.T) {
 		}
 
 		productMock := mock.NewProductRepositoryMock()
-		paymentMock := paymentmock.NewPaymentServiceMock()
 
-		uc := usecase.NewOrderUseCase(orderMock, productMock, paymentMock)
+		uc := usecase.NewOrderUseCase(orderMock, productMock)
 
 		order, err := uc.GetOrderByID(1)
 		assert.NoError(t, err)
@@ -161,9 +149,8 @@ func TestGetOrderByID(t *testing.T) {
 		}
 
 		productMock := mock.NewProductRepositoryMock()
-		paymentMock := paymentmock.NewPaymentServiceMock()
 
-		uc := usecase.NewOrderUseCase(orderMock, productMock, paymentMock)
+		uc := usecase.NewOrderUseCase(orderMock, productMock)
 
 		order, err := uc.GetOrderByID(999)
 		assert.Error(t, err)
@@ -188,12 +175,11 @@ func TestListOrders(t *testing.T) {
 			}, nil
 		}
 		productRepo := mock.NewProductRepositoryMock()
-		paymentMock := paymentmock.NewPaymentServiceMock()
 
-		uc := usecase.NewOrderUseCase(orderRepo, productRepo, paymentMock)
+		uc := usecase.NewOrderUseCase(orderRepo, productRepo)
 
 		result, err := uc.ListOrders(input.OrderFilterInput{})
-		
+
 		assert.NoError(t, err)
 		assert.NotEqual(t, expected, result)
 	})
@@ -214,13 +200,12 @@ func TestListOrders(t *testing.T) {
 			}, nil
 		}
 		productRepo := mock.NewProductRepositoryMock()
-		paymentMock := paymentmock.NewPaymentServiceMock()
 
-		uc := usecase.NewOrderUseCase(orderRepo, productRepo, paymentMock)
+		uc := usecase.NewOrderUseCase(orderRepo, productRepo)
 
 		id := 1
 		result, err := uc.ListOrders(input.OrderFilterInput{CustomerID: &id})
-		
+
 		assert.NoError(t, err)
 		assert.Equal(t, expected, result)
 	})
@@ -236,9 +221,8 @@ func TestListOrders(t *testing.T) {
 			return expected, nil
 		}
 		productRepo := mock.NewProductRepositoryMock()
-		paymentMock := paymentmock.NewPaymentServiceMock()
 
-		uc := usecase.NewOrderUseCase(orderRepo, productRepo, paymentMock)
+		uc := usecase.NewOrderUseCase(orderRepo, productRepo)
 
 		result, err := uc.ListOrders(input.OrderFilterInput{Status: "PAYMENT_PENDING"})
 
@@ -252,49 +236,11 @@ func TestListOrders(t *testing.T) {
 			return nil, assert.AnError
 		}
 		productRepo := mock.NewProductRepositoryMock()
-		paymentMock := paymentmock.NewPaymentServiceMock()
 
-		uc := usecase.NewOrderUseCase(orderRepo, productRepo, paymentMock)
+		uc := usecase.NewOrderUseCase(orderRepo, productRepo)
 
 		result, err := uc.ListOrders(input.OrderFilterInput{Status: "FAIL"})
 		assert.Error(t, err)
 		assert.Nil(t, result)
-	})
-}
-
-func TestCheckout(t *testing.T) {
-	t.Run("should update status to PAYMENT_RECEIVED when payment succeeds", func(t *testing.T) {
-		orderRepo := mock.NewOrderRepositoryMock()
-		orderRepo.UpdateStatusFunc = func(id int, status string) error {
-			assert.Equal(t, "PAYMENT_RECEIVED", status)
-			return nil
-		}
-		paymentMock := paymentmock.NewPaymentServiceMock()
-		paymentMock.PaymentFunc = func(payment.PaymentInput) (payment.PaymentOutput, error) {
-			return payment.PaymentOutput{}, nil
-		}
-		productRepo := mock.NewProductRepositoryMock()
-
-		uc := usecase.NewOrderUseCase(orderRepo, productRepo, paymentMock)
-
-		err := uc.Checkout(1)
-		assert.NoError(t, err)
-	})
-
-	t.Run("should return error when payment fails", func(t *testing.T) {
-		orderRepo := mock.NewOrderRepositoryMock()
-
-		paymentMock := paymentmock.NewPaymentServiceMock()
-		paymentMock.PaymentFunc = func(payment.PaymentInput) (payment.PaymentOutput, error) {
-			return payment.PaymentOutput{}, errors.New("card declined")
-		}
-
-		productRepo := mock.NewProductRepositoryMock()
-
-		uc := usecase.NewOrderUseCase(orderRepo, productRepo, paymentMock)
-
-		err := uc.Checkout(1)
-		assert.Error(t, err)
-		assert.EqualError(t, err, "payment failed")
 	})
 }

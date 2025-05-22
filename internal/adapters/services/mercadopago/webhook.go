@@ -35,9 +35,9 @@ func CheckWebhookSignature(input CheckWebhookSignatureInput) bool {
 		}
 	}
 	manifest := fmt.Sprintf("id:%v;request-id:%v;ts:%v;", dataID, xRequestId, ts)
-	hmac := hmac.New(sha256.New, []byte(input.Secret))
-	hmac.Write([]byte(manifest))
-	sha := hex.EncodeToString(hmac.Sum(nil))
+	hmacHash := hmac.New(sha256.New, []byte(input.Secret))
+	hmacHash.Write([]byte(manifest))
+	sha := hex.EncodeToString(hmacHash.Sum(nil))
 
 	fmt.Println(input.Secret)
 	fmt.Println(os.Getenv("MP_WEBHOOK_SECRET"))

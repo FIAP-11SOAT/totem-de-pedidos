@@ -9,3 +9,16 @@ type PaymentOutput struct {
 	Status      string    `json:"status"`
 	Provider    string    `json:"provider"`
 }
+
+type CreatePaymentOutput struct {
+	PaymentID int    `json:"payment_id"`
+	OrderID   int    `json:"order_id"`
+	QRCode    string `json:"qrcode"`
+	QRCodeB64 string `json:"qrcode_b64"`
+}
+
+type GetPaymentOutput struct {
+	PaymentID string `json:"payment_id"`
+	OrderID   int    `json:"order_id"`
+	Status    string `json:"status"`
+}
