@@ -3,8 +3,9 @@ package repositories
 import (
 	"context"
 	"fmt"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
 	"strings"
+
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
 
 	"github.com/jackc/pgx/v5"
 

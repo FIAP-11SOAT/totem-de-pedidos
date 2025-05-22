@@ -90,9 +90,7 @@ func TestUpdateOrderStatus(t *testing.T) {
 		orderMock := mock.NewOrderRepositoryMock()
 		productMock := mock.NewProductRepositoryMock()
 
-		orderMock.UpdateStatusFunc = func(id int, status string) error {
-			return nil
-		}
+		orderMock.UpdateStatusFunc = func(i int, os entity.OrderStatus) error { return nil }
 
 		uc := usecase.NewOrderUseCase(orderMock, productMock)
 
@@ -104,9 +102,7 @@ func TestUpdateOrderStatus(t *testing.T) {
 		orderMock := mock.NewOrderRepositoryMock()
 		productMock := mock.NewProductRepositoryMock()
 
-		orderMock.UpdateStatusFunc = func(id int, status string) error {
-			return errors.New("order not found")
-		}
+		orderMock.UpdateStatusFunc = func(i int, os entity.OrderStatus) error { return errors.New("order not found") }
 
 		uc := usecase.NewOrderUseCase(orderMock, productMock)
 

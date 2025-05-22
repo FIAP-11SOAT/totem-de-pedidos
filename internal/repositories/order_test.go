@@ -230,7 +230,7 @@ func TestGetOrderByID(t *testing.T) {
 		order, err := repo.GetOrderByID(orderId)
 		assert.NoError(t, err)
 		assert.Equal(t, orderId, order.ID)
-		assert.Equal(t, "PENDING", order.Status)
+		assert.Equal(t, "PENDING", string(order.Status))
 		assert.Equal(t, customerID, order.CustomerID)
 		assert.Len(t, order.Items, 1)
 		assert.Equal(t, productID, order.Items[0].ProductID)
@@ -283,7 +283,7 @@ func TestListOrders(t *testing.T) {
 		orders, err = repo.ListOrders(input.OrderFilterInput{Status: "COMPLETED"})
 		assert.NoError(t, err)
 		assert.Len(t, orders, 1)
-		assert.Equal(t, "COMPLETED", orders[0].Status)
+		assert.Equal(t, "COMPLETED", string(orders[0].Status))
 
 		orders, err = repo.ListOrders(input.OrderFilterInput{CustomerID: &customerId})
 		assert.NoError(t, err)

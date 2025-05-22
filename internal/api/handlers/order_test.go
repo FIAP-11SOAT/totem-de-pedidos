@@ -101,9 +101,7 @@ func TestUpdateOrderHandler(t *testing.T) {
 		e := echo.New()
 
 		mockService := mock.NewOrderServiceMock()
-		mockService.UpdateOrderStatusFunc = func(id int, status string) error {
-			return nil
-		}
+		mockService.UpdateOrderStatusFunc = func(i int, os entity.OrderStatus) error { return nil }
 
 		handler := handlers.NewOrderHandler(mockService)
 
@@ -156,9 +154,7 @@ func TestUpdateOrderHandler(t *testing.T) {
 		e := echo.New()
 
 		mockService := mock.NewOrderServiceMock()
-		mockService.UpdateOrderStatusFunc = func(id int, status string) error {
-			return errors.New("failed to update")
-		}
+		mockService.UpdateOrderStatusFunc = func(i int, os entity.OrderStatus) error { return errors.New("failed to update") }
 
 		handler := handlers.NewOrderHandler(mockService)
 
