@@ -12,4 +12,6 @@ func Routers(e *echo.Echo, dbConnection *dbadapter.DatabaseAdapter) {
 	routers.ProductsRouter(e, dbConnection)
 	routers.CustomerRouter(e, dbConnection)
 	routers.CategoryRouter(e, dbConnection)
+	routers.PaymentsRouter(e, dbConnection)
+	routers.OrdersRouter(e, dbConnection)
 }

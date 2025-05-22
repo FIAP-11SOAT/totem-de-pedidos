@@ -1,14 +1,12 @@
 package handlers
 
 import (
-	"net/http"
-	"strconv"
-
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/output"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 type ProductHandler struct {
@@ -118,27 +116,4 @@ func (p *ProductHandler) DeleteProduct(c echo.Context) error {
 	}
 
 	return c.NoContent(http.StatusNoContent)
-}
-
-func (p *ProductHandler) ListAllCategories(c echo.Context) error {
-	return c.JSON(http.StatusInternalServerError, "")
-}
-
-func (p *ProductHandler) GetProductByCategoryID(c echo.Context) error {
-	CategoryID := c.Param("id")
-	if CategoryID == "" {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Category ID is required"})
-	}
-
-	CategoryIDInt, err := strconv.Atoi(CategoryID)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid Category ID"})
-	}
-
-	products, erro := p.productService.GetProductByCategoryID(CategoryIDInt)
-	if erro != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": erro.Error()})
-	}
-
-	return c.JSON(http.StatusOK, products)
 }

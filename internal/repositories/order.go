@@ -3,19 +3,31 @@ package repositories
 import (
 	"context"
 	"fmt"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
 	"strings"
+
+	"github.com/jackc/pgx/v5"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
-	"github.com/jackc/pgx/v5"
+)
+
+const (
+	GetOrderItemsQuery    = `SELECT id, product_id, quantity, price, created_at FROM order_items WHERE order_id = $1`
+	GetOrderByIdQuery     = `SELECT id, status, total_amount, customer_id, order_date, created_at FROM orders WHERE id = $1`
+	InsertOrderItemsQuery = `INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)`
+	InsertOrderQuery      = `INSERT INTO orders (status, total_amount, notification_attempts, customer_id) VALUES ($1, $2, $3, $4) RETURNING id`
+	UpdateStatusQuery     = `UPDATE orders SET status = $1, updated_at = current_timestamp WHERE id = $2`
+	ListOrdersBaseQuery   = `SELECT id, status, total_amount, customer_id, notification_attempts, order_date, created_at FROM orders`
+	UpdatePaymentIDQuery  = `UPDATE orders SET payment_id = $1 WHERE id = $2`
 )
 
 type orderRepository struct {
 	sqlClient *pgx.Conn
 }
 
-func NewOrderRepository(database *dbadapter.DatabaseAdapter) *orderRepository {
+func NewOrderRepository(database *dbadapter.DatabaseAdapter) repositories.Order {
 	return &orderRepository{
 		sqlClient: database.Client,
 	}
@@ -37,7 +49,7 @@ func (o *orderRepository) CreateOrder(input entity.Order) (int, error) {
 
 	var orderID int
 	err = tx.QueryRow(
-		ctx, insertOrderQuery(),
+		ctx, InsertOrderQuery,
 		input.Status, input.TotalAmount, input.NotificationAttempts, input.CustomerID,
 	).Scan(&orderID)
 	if err != nil {
@@ -46,7 +58,7 @@ func (o *orderRepository) CreateOrder(input entity.Order) (int, error) {
 
 	for _, item := range input.Items {
 		_, err := tx.Exec(
-			ctx, insertOrderItemsQuery(),
+			ctx, InsertOrderItemsQuery,
 			orderID, item.ProductID, item.Quantity, item.Price,
 		)
 		if err != nil {
@@ -62,21 +74,16 @@ func (o *orderRepository) CreateOrder(input entity.Order) (int, error) {
 	return orderID, nil
 }
 
-func insertOrderQuery() string {
-	return `
-		INSERT INTO orders (status, total_amount, notification_attempts, customer_id)
-		VALUES ($1, $2, $3, $4)
-		RETURNING id
-	`
+func (o *orderRepository) AddPayment(orderID int, paymentID int) error {
+	_, err := o.sqlClient.Exec(context.Background(), UpdatePaymentIDQuery, paymentID, orderID)
+	if err != nil {
+		return fmt.Errorf("failed to update order with payment ID: %w", err)
+	}
+	return nil
 }
 
-func insertOrderItemsQuery() string {
-	return `INSERT INTO order_items (order_id, product_id, quantity, price)
-	VALUES ($1, $2, $3, $4)`
-}
-
-func (o *orderRepository) UpdateStatus(orderID int, status string) error {
-	tag, err := o.sqlClient.Exec(context.Background(), updateStatusQuery(), status, orderID)
+func (o *orderRepository) UpdateStatus(orderID int, status entity.OrderStatus) error {
+	tag, err := o.sqlClient.Exec(context.Background(), UpdateStatusQuery, status, orderID)
 	if err != nil {
 		return err
 	}
@@ -87,12 +94,9 @@ func (o *orderRepository) UpdateStatus(orderID int, status string) error {
 
 	return nil
 }
-func updateStatusQuery() string {
-	return `UPDATE orders SET status = $1, updated_at = current_timestamp WHERE id = $2`
-}
 
 func (o *orderRepository) GetOrderByID(orderID int) (entity.Order, error) {
-	row := o.sqlClient.QueryRow(context.Background(), getOrderByIdQuery(), orderID)
+	row := o.sqlClient.QueryRow(context.Background(), GetOrderByIdQuery, orderID)
 
 	var order entity.Order
 	err := row.Scan(
@@ -107,7 +111,7 @@ func (o *orderRepository) GetOrderByID(orderID int) (entity.Order, error) {
 		return entity.Order{}, err
 	}
 
-	rows, err := o.sqlClient.Query(context.Background(), getOrderItemsQuery(), orderID)
+	rows, err := o.sqlClient.Query(context.Background(), GetOrderItemsQuery, orderID)
 	if err != nil {
 		return entity.Order{}, err
 	}
@@ -127,21 +131,11 @@ func (o *orderRepository) GetOrderByID(orderID int) (entity.Order, error) {
 	return order, nil
 }
 
-func getOrderByIdQuery() string {
-	return `SELECT id, status, total_amount, customer_id, order_date, created_at
-	FROM orders WHERE id = $1`
-}
-
-func getOrderItemsQuery() string {
-	return `SELECT id, product_id, quantity, price, created_at
-		FROM order_items WHERE order_id = $1`
-}
-
 func (o *orderRepository) ListOrders(filter input.OrderFilterInput) ([]entity.Order, error) {
-	baseQuery := listOrdersBaseQuery()
+	baseQuery := ListOrdersBaseQuery
 
-	where := []string{}
-	args := []interface{}{}
+	var where []string
+	var args []interface{}
 	argIndex := 1
 
 	if filter.ID != nil {
@@ -197,16 +191,4 @@ func (o *orderRepository) ListOrders(filter input.OrderFilterInput) ([]entity.Or
 	}
 
 	return orders, nil
-}
-
-func listOrdersBaseQuery() string {
-	return `SELECT 
-		id, 
-		status, 
-		total_amount, 
-		customer_id, 
-		notification_attempts, 
-		order_date, 
-		created_at
-	FROM orders`
 }

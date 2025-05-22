@@ -2,13 +2,23 @@ create table
     if not exists "customers" (
         id serial primary key,
         name varchar(100) not null,
-        email varchar(100) not null unique,
+        email varchar(100) not null,
         tax_id varchar(50) not null,
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp,
-        constraint "unique_tax_id" unique ("tax_id"),
-        constraint "unique_email" unique ("email")
-        -- constraint "valid_email" check (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,}$')
+        constraint "unique_email" unique ("email"),
+        constraint "unique_tax_id" unique ("tax_id")
+    );
+
+create table
+    if not exists "payments" (
+        id serial primary key,
+        amount numeric(10, 2) not null,
+        payment_date timestamp default current_timestamp,
+        status varchar(50) not null,
+        provider varchar(50) not null,
+        created_at timestamp default current_timestamp,
+        updated_at timestamp default current_timestamp
     );
 
 create table
@@ -20,7 +30,8 @@ create table
         total_amount numeric(10, 2) not null,
         created_at timestamp default current_timestamp,
         updated_at timestamp default current_timestamp,
-        customer_id integer references customers (id) on delete cascade
+        customer_id integer references customers (id) on delete cascade,
+        payment_id integer references payments (id) on delete cascade
     );
 
 create table

@@ -73,14 +73,6 @@ func (p *Product) getCategoryName(categoryName string) (*entity.ProductCategory,
 	return category, nil
 }
 
-func (p *Product) GetProductByCategoryID(categoryID int) ([]*entity.Product, error) {
-	products, err := p.productRepository.GetProductsByCategoryID(context.Background(), categoryID)
-	if err != nil {
-		return nil, fmt.Errorf("error fetching products by category ID: %w", err)
-	}
-	return products, nil
-}
-
 func (p *Product) UpdateProduct(id string, productInput *input.ProductInput) (*entity.Product, error) {
 	existing, err := p.productRepository.FindProductByID(context.Background(), id)
 	if err != nil {
@@ -110,8 +102,4 @@ func (p *Product) DeleteProduct(productID string) error {
 		return fmt.Errorf("error deleting product: %w", err)
 	}
 	return nil
-}
-
-func (p *Product) GetCategories() ([]*entity.ProductCategory, error) {
-	return nil, nil
 }

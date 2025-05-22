@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	middlewareecho "github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/gommon/log"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api"
@@ -21,9 +21,12 @@ func getEnvOrDefault(key, fallback string) string {
 }
 
 func main() {
+
 	isProduction := getEnvOrDefault("PROFILE", "dev") == "prod"
 	if !isProduction {
-		err := godotenv.Load()
+		pwd, _ := os.Getwd()
+		envFile := fmt.Sprintf("%s/.env", pwd)
+		err := godotenv.Load(envFile)
 		if err != nil {
 			log.Fatal("Error loading .env file")
 		}
@@ -39,10 +42,12 @@ func main() {
 	})
 
 	app := echo.New()
-	app.Use(middleware.CORS())
-	app.Use(middleware.Recover())
-	app.Use(middleware.Logger())
+	app.Logger.SetLevel(log.INFO)
+
+	app.Use(middlewareecho.CORS())
+	app.Use(middlewareecho.Recover())
+
 	api.Routers(app, databaseAdapter)
 
-	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("SERVER_PORT"))))
+	app.Logger.Fatal(app.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }

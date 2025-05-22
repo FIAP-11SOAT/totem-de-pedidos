@@ -1,9 +1,12 @@
 package input
 
-import "errors"
+import (
+	"errors"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
+)
 
 type OrderInput struct {
-	CustomerID int              `json:"customer_id"`
+	CustomerID *int             `json:"customer_id"`
 	Items      []OrderItemInput `json:"items"`
 }
 
@@ -17,7 +20,7 @@ func (o *OrderInput) Validate() error {
 }
 
 type UpdateOrderInput struct {
-	Status string `json:"status"`
+	Status entity.OrderStatus `json:"status"`
 }
 
 func (u *UpdateOrderInput) Validate() error {

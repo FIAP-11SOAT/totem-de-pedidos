@@ -12,39 +12,74 @@ import (
 
 var client = &http.Client{}
 
-type Store struct {
-	AccessToken string
+type MPStoreClient struct {
+	AccessToken   string
+	UserID        string
+	ExternalPosID string
 }
 
-func (s *Store) CreateDynamicQR(input *request.CreateDynamicQRInput) (response.DynamicQRResponse, error) {
+func NewMPStoreClient(AccessToken, UserID, ExternalPosID string) *MPStoreClient {
+	return &MPStoreClient{
+		AccessToken:   AccessToken,
+		UserID:        UserID,
+		ExternalPosID: ExternalPosID,
+	}
+}
+
+func (s *MPStoreClient) GetPaymentByID(paymentID string) (*response.PaymentIDResponse, error) {
+	endpoint := fmt.Sprintf("https://api.mercadopago.com/v1/payments/%s", paymentID)
+
+	req, err := http.NewRequest("GET", endpoint, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.AccessToken))
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var responsePayment response.PaymentIDResponse
+	if err := json.NewDecoder(resp.Body).Decode(&responsePayment); err != nil {
+		return nil, err
+	}
+
+	return &responsePayment, nil
+}
+
+func (s *MPStoreClient) CreateDynamicQR(input *request.CreateDynamicQRInput) (*response.DynamicQRResponse, error) {
 	endpoint := fmt.Sprintf(
 		"https://api.mercadopago.com/instore/orders/qr/seller/collectors/%s/pos/%s/qrs",
-		input.UserID,
-		input.ExternalPosID,
+		s.UserID,
+		s.ExternalPosID,
 	)
 
-	respObj := response.DynamicQRResponse{}
-	content, err := json.Marshal(input.Payload)
+	content, err := json.Marshal(input)
 	if err != nil {
-		return respObj, err
+		return nil, err
 	}
 
 	req, err := http.NewRequest("POST", endpoint, bytes.NewReader(content))
 	if err != nil {
-		return respObj, err
+		return nil, err
 	}
+
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", s.AccessToken))
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return respObj, err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
-	if err := json.NewDecoder(resp.Body).Decode(&respObj); err != nil {
-		return respObj, err
+	var responseQrCode response.DynamicQRResponse
+	if err := json.NewDecoder(resp.Body).Decode(&responseQrCode); err != nil {
+		return nil, err
 	}
 
-	return respObj, nil
+	return &responseQrCode, nil
 }

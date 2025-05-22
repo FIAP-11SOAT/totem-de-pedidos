@@ -7,8 +7,7 @@ import (
 
 type Order interface {
 	CreateOrder(input entity.Order) (int, error)
-	UpdateOrderStatus(id int, status string) error
+	UpdateOrderStatus(id int, status entity.OrderStatus) error
 	GetOrderByID(id int) (entity.Order, error)
 	ListOrders(filter input.OrderFilterInput) ([]entity.Order, error)
-	Checkout(orderID int) error
 }

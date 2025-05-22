@@ -11,7 +11,4 @@ type Product interface {
 	CreateProduct(productDTO *input.ProductInput) (*entity.Product, error)
 	UpdateProduct(id string, productDTO *input.ProductInput) (*entity.Product, error)
 	DeleteProduct(productID string) error
-
-	GetCategories() ([]*entity.ProductCategory, error)
-	GetProductByCategoryID(categoryID int) ([]*entity.Product, error)
 }
