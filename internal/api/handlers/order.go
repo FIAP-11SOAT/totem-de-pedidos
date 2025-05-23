@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/dto"
 	"net/http"
 	"strconv"
+
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/dto"
 
 	"github.com/labstack/echo/v4"
 
