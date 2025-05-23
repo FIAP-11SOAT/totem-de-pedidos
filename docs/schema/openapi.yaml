@@ -11,6 +11,7 @@ info:
   description: '**Totem de Pedidos** é um sistema de pedidos para restaurantes, bares e lanchonetes. Ele permite que os clientes façam pedidos diretamente do seu dispositivo móvel, sem precisar esperar por um garçom. O sistema é fácil de usar e pode ser personalizado para atender às necessidades específicas de cada estabelecimento.'
 tags:
   - name: Customers
+  - name: Orders
 paths:
   /customers:
     get:
@@ -89,6 +90,112 @@ paths:
           description: 'There is no content to send for this request, but the headers may be useful. '
       tags:
         - Customers
+  /orders:
+    get:
+      operationId: Orders_getOrders
+      summary: Get all orders
+      description: Get all orders with optional filters
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+          explode: false
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: customer_id
+          in: query
+          required: false
+          schema:
+            type: integer
+          explode: false
+        - name: notification_attempts
+          in: query
+          required: false
+          schema:
+            type: integer
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+      tags:
+        - Orders
+    post:
+      operationId: Orders_createOrder
+      summary: Create a new order
+      description: Create a new order with associated items
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCreationResponse'
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+  /orders/{id}:
+    get:
+      operationId: Orders_getOrder
+      summary: Get an order by ID
+      description: Get an order by its unique identifier
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+      tags:
+        - Orders
+    put:
+      operationId: Orders_updateOrder
+      summary: Update an order by ID
+      description: Update an order's status by its unique identifier
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderUpdateResponse'
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrderInput'
 components:
   schemas:
     Customer:
@@ -103,4 +210,104 @@ components:
         name:
           type: string
         email:
+          type: string
+    Order:
+      type: object
+      required:
+        - id
+        - order_date
+        - notification_attempts
+        - status
+        - total_amount
+        - created_at
+        - customer_id
+        - items
+      properties:
+        id:
+          type: integer
+        order_date:
+          type: string
+        notification_attempts:
+          type: integer
+        status:
+          type: string
+        total_amount:
+          type: number
+          format: double
+        created_at:
+          type: string
+        customer_id:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+    OrderCreationResponse:
+      type: object
+      required:
+        - message
+        - orderId
+      properties:
+        message:
+          type: string
+        orderId:
+          type: string
+    OrderInput:
+      type: object
+      required:
+        - customer_id
+        - items
+      properties:
+        customer_id:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemInput'
+    OrderItem:
+      type: object
+      required:
+        - id
+        - quantity
+        - price
+        - created_at
+        - order_id
+        - product_id
+      properties:
+        id:
+          type: integer
+        quantity:
+          type: integer
+        price:
+          type: number
+          format: double
+        created_at:
+          type: string
+        order_id:
+          type: integer
+        product_id:
+          type: integer
+    OrderItemInput:
+      type: object
+      required:
+        - product_id
+        - quantity
+      properties:
+        product_id:
+          type: integer
+        quantity:
+          type: integer
+    OrderUpdateResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    UpdateOrderInput:
+      type: object
+      required:
+        - status
+      properties:
+        status:
           type: string
