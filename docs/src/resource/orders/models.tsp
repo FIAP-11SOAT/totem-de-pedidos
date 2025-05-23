@@ -1,31 +1,31 @@
 model Order {
-    id: int;
+    id: integer;
     order_date: string; 
-    notification_attempts: int;
-    status: OrderStatus;
+    notification_attempts: integer;
+    status: string;
     total_amount: float64;
     created_at: string; 
-    customer_id: int;
+    customer_id: integer;
     items: OrderItem[];
 }
 
 model OrderItem {
-    id: int;
-    quantity: int;
+    id: integer;
+    quantity: integer;
     price: float64;
     created_at: string; 
-    order_id: int;
-    product_id: int;
+    order_id: integer;
+    product_id: integer;
 }
 
 model OrderInput {
-    customer_id: int;
+    customer_id: integer;
     items: OrderItemInput[];
 }
 
 model OrderItemInput {
-    product_id: int;
-    quantity: int;
+    product_id: integer;
+    quantity: integer;
 }
 
 model OrderCreationResponse {
@@ -34,7 +34,7 @@ model OrderCreationResponse {
 }
 
 model UpdateOrderInput {
-    status: OrderStatus;
+    status: string; 
 }
 
 model OrderUpdateResponse {
