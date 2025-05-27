@@ -11,6 +11,16 @@ Desenvolver um sistema de backend monolítico que permita:
 - Acompanhamento em tempo real do status dos pedidos.
 - Administração de clientes, produtos e pedidos.
 
+## 📋 Documentação DDD
+
+https://miro.com/app/board/uXjVIHWL0sE=/?share_link_id=24901001533
+
+## 💻 Executar serviço
+
+```
+make compose-up
+```
+
 ## 📋 Funcionalidades
 
 ### Cliente
