@@ -1,5 +1,13 @@
 model Customer {
-    id: string;
-    name: string;
+    ID: string;
+    Name: string;
+    Email: string;
+    TaxID: string;
+    CreatedAt: string;
+}
+
+model CustomerInput {
+    taxid: string;
+    nome: string;
     email: string;
 }
