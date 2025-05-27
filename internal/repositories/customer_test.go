@@ -10,14 +10,14 @@ import (
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/pkg/tests"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCustomerRepository(t *testing.T) {
 	connStr := tests.CreatePostgresDataBase(t)
 
-	client, err := pgx.Connect(context.Background(), connStr)
+	client, err := pgxpool.NewWithConfig(context.Background(), dbadapter.Config(connStr))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		assert.NoError(t, err)

@@ -8,10 +8,11 @@ import (
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type categoryRepository struct {
-	sqlClient *pgx.Conn
+	sqlClient *pgxpool.Pool
 }
 
 func NewCategoryRepository(database *dbadapter.DatabaseAdapter) repositories.Category {

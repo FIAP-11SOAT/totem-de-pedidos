@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
@@ -13,7 +14,7 @@ import (
 )
 
 type productRepository struct {
-	sqlClient *pgx.Conn
+	sqlClient *pgxpool.Pool
 }
 
 func NewProductRepository(database *dbadapter.DatabaseAdapter) repositories.Product {

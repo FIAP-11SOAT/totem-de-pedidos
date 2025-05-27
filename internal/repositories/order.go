@@ -7,7 +7,7 @@ import (
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
@@ -25,7 +25,7 @@ const (
 )
 
 type orderRepository struct {
-	sqlClient *pgx.Conn
+	sqlClient *pgxpool.Pool
 }
 
 func NewOrderRepository(database *dbadapter.DatabaseAdapter) repositories.Order {

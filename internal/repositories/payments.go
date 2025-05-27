@@ -2,8 +2,10 @@ package repositories
 
 import (
 	"context"
+
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
@@ -17,7 +19,7 @@ const (
 )
 
 type paymentsRepository struct {
-	sqlClient *pgx.Conn
+	sqlClient *pgxpool.Pool
 }
 
 func NewPaymentsRepository(database *dbadapter.DatabaseAdapter) repositories.Payments {
