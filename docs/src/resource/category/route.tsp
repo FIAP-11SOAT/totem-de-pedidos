@@ -20,10 +20,6 @@ interface Category {
     @doc("Get a categories by ID")
     @get FindCategoryByID(@path id: string): Category;
 
-    @summary("Create a new categories")
-    @doc("Create a new categories")
-    @post CreateCategory(categories: Category): Category;
-
     @summary("update a categories")
     @doc("update a categories")
     @put updateCategory(@path id: string): void;
