@@ -28,4 +28,8 @@ interface Category {
     @doc("Delete a categories")
     @delete DeleteCategory(@path id: string): void;
 
+    @summary("Create a new category")
+    @doc("Create a new category")
+    @post createCategory(@body category: CategoryInput): Category;
+
 }

@@ -12,7 +12,91 @@ info:
 tags:
   - name: Customer
   - name: Orders
+  - name: Categories
 paths:
+  /categories:
+    get:
+      operationId: Category_ListAllCategories
+      summary: Get all categories
+      description: Get all categories
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+      tags:
+        - Categories
+    post:
+      operationId: Category_createCategory
+      summary: Create a new category
+      description: Create a new category
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema: {}
+      tags:
+        - Categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
+  /categories/{id}:
+    get:
+      operationId: Category_FindCategoryByID
+      summary: Get a categories by ID
+      description: Get a categories by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema: {}
+      tags:
+        - Categories
+    put:
+      operationId: Category_updateCategory
+      summary: update a categories
+      description: update a categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+      tags:
+        - Categories
+    delete:
+      operationId: Category_DeleteCategory
+      summary: Delete a categories
+      description: Delete a categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+      tags:
+        - Categories
   /customer:
     get:
       operationId: Customers_getCustomer
@@ -162,6 +246,16 @@ paths:
               $ref: '#/components/schemas/UpdateOrderInput'
 components:
   schemas:
+    CategoryInput:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
     Customer:
       type: object
       required:
