@@ -11,14 +11,14 @@ import (
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/pkg/tests"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateOrder(t *testing.T) {
 	connStr := tests.CreatePostgresDataBase(t)
 
-	client, err := pgx.Connect(context.Background(), connStr)
+	client, err := pgxpool.NewWithConfig(context.Background(), dbadapter.Config(connStr))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		assert.NoError(t, err)
@@ -119,7 +119,7 @@ func TestCreateOrder(t *testing.T) {
 func TestUpdateStatus(t *testing.T) {
 	connStr := tests.CreatePostgresDataBase(t)
 
-	client, err := pgx.Connect(context.Background(), connStr)
+	client, err := pgxpool.NewWithConfig(context.Background(), dbadapter.Config(connStr))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		assert.NoError(t, err)
@@ -167,7 +167,7 @@ func TestUpdateStatus(t *testing.T) {
 func TestGetOrderByID(t *testing.T) {
 	connStr := tests.CreatePostgresDataBase(t)
 
-	client, err := pgx.Connect(context.Background(), connStr)
+	client, err := pgxpool.NewWithConfig(context.Background(), dbadapter.Config(connStr))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		assert.NoError(t, err)
@@ -241,7 +241,7 @@ func TestGetOrderByID(t *testing.T) {
 func TestListOrders(t *testing.T) {
 	connStr := tests.CreatePostgresDataBase(t)
 
-	client, err := pgx.Connect(context.Background(), connStr)
+	client, err := pgxpool.NewWithConfig(context.Background(), dbadapter.Config(connStr))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		panic(err)

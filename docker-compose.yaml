@@ -16,7 +16,10 @@ services:
       - DB_HOST=db:5432
       - DB_NAME=totempedidos
       - DB_OPTIONS=?sslmode=disable
-      - SERVER_PORT=8080
+      - PORT=8080
+      - MP_TOKEN=APP_USR-1916687851464784-031623-82a0e899f1439bff9170071d4539cf4f-2331609065
+      - MP_USER_ID=2331609065
+      - MP_EXTERNAL_POS_ID=FIAPMFAVLPOS
     depends_on:
       db:
         condition: service_healthy

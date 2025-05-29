@@ -10,26 +10,30 @@ info:
     altText: FIAP 11SOAT
   description: '**Totem de Pedidos** é um sistema de pedidos para restaurantes, bares e lanchonetes. Ele permite que os clientes façam pedidos diretamente do seu dispositivo móvel, sem precisar esperar por um garçom. O sistema é fácil de usar e pode ser personalizado para atender às necessidades específicas de cada estabelecimento.'
 tags:
-  - name: Customers
+  - name: Customer
   - name: Orders
 paths:
-  /customers:
+  /customer:
     get:
-      operationId: Customers_getCustomers
-      summary: Get all customers
-      description: Get all customers
-      parameters: []
+      operationId: Customers_getCustomer
+      summary: Get a customer by tax ID
+      description: Get a customer by tax ID
+      parameters:
+        - name: taxid
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
       responses:
         '200':
           description: The request has succeeded.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Customer'
+                $ref: '#/components/schemas/Customer'
       tags:
-        - Customers
+        - Customer
     post:
       operationId: Customers_createCustomer
       summary: Create a new customer
@@ -43,53 +47,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
       tags:
-        - Customers
+        - Customer
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                customer:
-                  $ref: '#/components/schemas/Customer'
-              required:
-                - customer
-  /customers/{id}:
-    get:
-      operationId: Customers_getCustomer
-      summary: Get a customer by ID
-      description: Get a customer by ID
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-      tags:
-        - Customers
-    delete:
-      operationId: Customers_deleteCustomer
-      summary: Delete a customer
-      description: Delete a customer
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: 'There is no content to send for this request, but the headers may be useful. '
-      tags:
-        - Customers
+              $ref: '#/components/schemas/CustomerInput'
   /orders:
     get:
       operationId: Orders_getOrders
@@ -201,13 +165,32 @@ components:
     Customer:
       type: object
       required:
-        - id
-        - name
+        - ID
+        - Name
+        - Email
+        - TaxID
+        - CreatedAt
+      properties:
+        ID:
+          type: string
+        Name:
+          type: string
+        Email:
+          type: string
+        TaxID:
+          type: string
+        CreatedAt:
+          type: string
+    CustomerInput:
+      type: object
+      required:
+        - taxid
+        - nome
         - email
       properties:
-        id:
+        taxid:
           type: string
-        name:
+        nome:
           type: string
         email:
           type: string
