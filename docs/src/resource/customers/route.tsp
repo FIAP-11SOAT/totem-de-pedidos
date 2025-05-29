@@ -18,5 +18,5 @@ interface Customers {
 
     @summary("Create a new customer")
     @doc("Create a new customer")
-    @post createCustomer(customer: CustomerInput): Customer;
+    @post createCustomer(@body customer: CustomerInput): Customer;
 }

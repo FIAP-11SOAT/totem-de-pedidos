@@ -53,12 +53,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                customer:
-                  $ref: '#/components/schemas/CustomerInput'
-              required:
-                - customer
+              $ref: '#/components/schemas/CustomerInput'
   /orders:
     get:
       operationId: Orders_getOrders
