@@ -22,7 +22,7 @@ interface Category {
 
     @summary("update a categories")
     @doc("update a categories")
-    @put updateCategory(@path id: string): void;
+    @put updateCategory(@path id: string, @body category: CategoryInput): void;
 
     @summary("Delete a categories")
     @doc("Delete a categories")
