@@ -13,6 +13,7 @@ tags:
   - name: Customer
   - name: Orders
   - name: Categories
+  - name: Payments
 paths:
   /categories:
     get:
@@ -82,6 +83,12 @@ paths:
           description: 'There is no content to send for this request, but the headers may be useful. '
       tags:
         - Categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryInput'
     delete:
       operationId: Category_DeleteCategory
       summary: Delete a categories
@@ -244,6 +251,64 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateOrderInput'
+  /payments:
+    post:
+      operationId: Payments_createPayment
+      summary: Create a new payment
+      description: Create a new payment with the specified details
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentResponse'
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInput'
+  /payments/webhook:
+    post:
+      operationId: Payments_webhook
+      summary: Webhook for payment notifications
+      description: Receive notifications for payment status updates
+      parameters: []
+      responses:
+        '204':
+          description: 'There is no content to send for this request, but the headers may be useful. '
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentNotification'
+  /payments/{id}:
+    get:
+      operationId: Payments_getPayment
+      summary: Get By ID
+      description: Get a payment by its unique identifier
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+      tags:
+        - Payments
 components:
   schemas:
     CategoryInput:
@@ -255,6 +320,22 @@ components:
         name:
           type: string
         description:
+          type: string
+    CreatePaymentResponse:
+      type: object
+      required:
+        - payment_id
+        - order_id
+        - qrcode
+        - qrcode_b64
+      properties:
+        payment_id:
+          type: integer
+        order_id:
+          type: integer
+        qrcode:
+          type: string
+        qrcode_b64:
           type: string
     Customer:
       type: object
@@ -380,6 +461,40 @@ components:
         - message
       properties:
         message:
+          type: string
+    PaymentInput:
+      type: object
+      required:
+        - order_id
+        - amount
+        - title
+      properties:
+        order_id:
+          type: string
+        amount:
+          type: number
+        title:
+          type: string
+    PaymentNotification:
+      type: object
+    PaymentResponse:
+      type: object
+      required:
+        - id
+        - amount
+        - payment_date
+        - status
+        - provider
+      properties:
+        id:
+          type: integer
+        amount:
+          type: number
+        payment_date:
+          type: string
+        status:
+          type: string
+        provider:
           type: string
     UpdateOrderInput:
       type: object
