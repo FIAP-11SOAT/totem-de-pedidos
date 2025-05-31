@@ -81,7 +81,7 @@ func (h *PaymentHandler) PaymentWebHook(c echo.Context) error {
 
 	err := h.paymentService.PaymentWebHook(&payload)
 	if err != nil {
-		c.Logger().Error(dto.LoggerInfo{Scope: "post:payment:webhook", Message: "Failed to process webhook payload"})
+		c.Logger().Error(dto.LoggerInfo{Scope: "post:payment:webhook", Message: "Failed to process webhook payload" + err.Error()})
 		return c.NoContent(202)
 	}
 

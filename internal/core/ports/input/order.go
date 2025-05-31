@@ -7,7 +7,7 @@ import (
 )
 
 type OrderInput struct {
-	CustomerID int              `json:"customer_id"`
+	CustomerID *int             `json:"customer_id"`
 	Items      []OrderItemInput `json:"items"`
 }
 

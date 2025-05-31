@@ -26,10 +26,12 @@ func NewOrderHandler(service usecase.Order) *OrderHanlder {
 func (o *OrderHanlder) CreateOrder(c echo.Context) error {
 	var orderInput input.OrderInput
 	if err := c.Bind(&orderInput); err != nil {
+		c.Logger().Error("failed to create order", err)
 		return c.JSON(http.StatusBadRequest, dto.HttpResponseError{Error: "invalid input"})
 	}
 
 	if err := orderInput.Validate(); err != nil {
+		c.Logger().Error("failed to create order", err)
 		return c.JSON(http.StatusBadRequest, dto.HttpResponseError{Error: err.Error()})
 	}
 
@@ -37,6 +39,7 @@ func (o *OrderHanlder) CreateOrder(c echo.Context) error {
 
 	orderId, err := o.orderService.CreateOrder(orderEntity)
 	if err != nil {
+		c.Logger().Error("failed to create order", err)
 		return c.JSON(http.StatusInternalServerError, dto.HttpResponseError{Error: "failed to create order"})
 	}
 
