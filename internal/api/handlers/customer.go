@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
@@ -34,7 +33,6 @@ func (h *CustomerHandler) CreateCustomer(c echo.Context) error {
 
 func (h *CustomerHandler) IdentifyCustomer(c echo.Context) error {
 	taxId := c.QueryParam("taxid")
-	fmt.Println(taxId)
 
 	if taxId == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "param taxid missing"})
@@ -44,9 +42,9 @@ func (h *CustomerHandler) IdentifyCustomer(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
+
 	if customerResponse == nil {
-		fmt.Println("no content")
-		return c.JSON(http.StatusNoContent, "")
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "customer not found"})
 	}
 
 	return c.JSON(http.StatusOK, customerResponse)

@@ -90,6 +90,7 @@ func (o *OrderHanlder) GetOrders(c echo.Context) error {
 
 	orders, err := o.orderService.ListOrders(filter)
 	if err != nil {
+		c.Logger().Error("failed to fetch orders", err)
 		return c.JSON(http.StatusInternalServerError, dto.HttpResponseError{Error: "could not fetch orders"})
 	}
 
