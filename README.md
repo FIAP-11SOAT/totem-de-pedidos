@@ -13,7 +13,7 @@ Desenvolver um sistema de backend monolítico que permita:
 
 ### 📺 Vídeo da Apresentação
 
-[Fase 1 - Totem de Pedido (DDD + Hexagonal + Docker)](https://github.com/FIAP-11SOAT/totem-de-pedidos)
+[Fase 1 - Totem de Pedido (DDD + Hexagonal + Docker)](https://vimeo.com/1089873737/14b27e0fa3)
 
 ## 📋 Documentação DDD
 
