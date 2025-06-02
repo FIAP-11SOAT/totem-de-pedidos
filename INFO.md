@@ -1,5 +1,14 @@
 # ℹ️ Informações do Projeto - Totem de Pedidos
 
+## Video
+
+[Fase 1 - Totem de Pedido (DDD + Hexagonal + Docker)](https://github.com/FIAP-11SOAT/totem-de-pedidos)
+
+## DDD - Domain-Driven Design
+
+O mapeamento do domínio (event storming, contextos, etc) está disponível no Miro:  
+[https://miro.com/app/board/uXjVIHWL0sE=/](https://miro.com/app/board/uXjVIHWL0sE=/)
+
 ## Como rodar o projeto
 
 1. **Pré-requisitos**:  
@@ -8,7 +17,7 @@
 2. **Subindo o ambiente**:  
    Execute o comando abaixo na raiz do projeto:
    ```sh
-   make compose-up
+   docker compose up --build
    ```
    Isso irá subir os containers da aplicação, banco de dados e executar as migrations automaticamente.
 
@@ -33,11 +42,6 @@ O projeto disponibiliza três visualizações para a documentação OpenAPI:
 
 O arquivo OpenAPI bruto pode ser acessado em:  
 [http://localhost:8080/docs/openapi.yaml](http://localhost:8080/docs/openapi.yaml)
-
-## DDD - Domain-Driven Design
-
-O mapeamento do domínio (event storming, contextos, etc) está disponível no Miro:  
-[https://miro.com/app/board/uXjVIHWL0sE=/](https://miro.com/app/board/uXjVIHWL0sE=/)
 
 ## Repositório
 

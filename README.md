@@ -11,15 +11,35 @@ Desenvolver um sistema de backend monolítico que permita:
 - Acompanhamento em tempo real do status dos pedidos.
 - Administração de clientes, produtos e pedidos.
 
+### 📺 Vídeo da Apresentação
+
+[Fase 1 - Totem de Pedido (DDD + Hexagonal + Docker)](https://github.com/FIAP-11SOAT/totem-de-pedidos)
+
 ## 📋 Documentação DDD
 
-https://miro.com/app/board/uXjVIHWL0sE=/?share_link_id=24901001533
+[Miro DDD Documentação](https://miro.com/app/board/uXjVIHWL0sE=/?share_link_id=24901001533)
 
 ## 💻 Executar serviço
 
 ```
-make compose-up
+docker compose up --build
 ```
+
+## 📖 Documentação da API
+
+O projeto disponibiliza três visualizações para a documentação OpenAPI:
+
+- **Swagger UI**:  
+  [http://localhost:8080/docs/swagger](http://localhost:8080/docs/swagger)
+
+- **Redoc**:  
+  [http://localhost:8080/docs/redoc](http://localhost:8080/docs/redoc)
+
+- **Scalar**:  
+  [http://localhost:8080/docs/scalar](http://localhost:8080/docs/scalar)
+
+O arquivo OpenAPI bruto pode ser acessado em:  
+[http://localhost:8080/docs/openapi.yaml](http://localhost:8080/docs/openapi.yaml)
 
 ## 📋 Funcionalidades
 
