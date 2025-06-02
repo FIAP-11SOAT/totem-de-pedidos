@@ -1,1 +1,5 @@
 docs/schema/openapi.yaml
+**/node_modules/
+**/tmp/
+.idea/
+.env
