@@ -31,8 +31,9 @@ func TestCreateOrder(t *testing.T) {
 
 		orderUc := usecase.NewOrderUseCase(orderMock, productMock)
 
+		var id int = 1
 		order := entity.Order{
-			CustomerID: 1,
+			CustomerID: &id,
 			Items: []entity.OrderItem{
 				{ProductID: 1, Quantity: 2},
 			},
@@ -50,8 +51,9 @@ func TestCreateOrder(t *testing.T) {
 			mock.NewProductRepositoryMock(),
 		)
 
+		var id int = 1
 		order := entity.Order{
-			CustomerID: 1,
+			CustomerID: &id,
 			Items:      []entity.OrderItem{},
 		}
 
@@ -71,8 +73,9 @@ func TestCreateOrder(t *testing.T) {
 
 		orderUc := usecase.NewOrderUseCase(orderMock, productMock)
 
+		var id int = 1
 		order := entity.Order{
-			CustomerID: 1,
+			CustomerID: &id,
 			Items: []entity.OrderItem{
 				{ProductID: 99, Quantity: 1},
 			},
@@ -114,9 +117,10 @@ func TestUpdateOrderStatus(t *testing.T) {
 
 func TestGetOrderByID(t *testing.T) {
 	t.Run("should return order when found", func(t *testing.T) {
+		var id int = 10
 		expected := entity.Order{
 			ID:          1,
-			CustomerID:  10,
+			CustomerID:  &id,
 			Status:      "PENDING",
 			TotalAmount: 42.00,
 			Items: []entity.OrderItem{
@@ -156,18 +160,19 @@ func TestGetOrderByID(t *testing.T) {
 
 func TestListOrders(t *testing.T) {
 	t.Run("should return list of orders without disscount", func(t *testing.T) {
+		var id int = 1
 		expected := []entity.Order{
-			{ID: 1, TotalAmount: 47.5, CustomerID: 1},
-			{ID: 2, TotalAmount: 95.0, CustomerID: 1},
-			{ID: 3, TotalAmount: 950.0, CustomerID: 1},
+			{ID: 1, TotalAmount: 47.5, CustomerID: &id},
+			{ID: 2, TotalAmount: 95.0, CustomerID: &id},
+			{ID: 3, TotalAmount: 950.0, CustomerID: &id},
 		}
 
 		orderRepo := mock.NewOrderRepositoryMock()
 		orderRepo.ListOrdersFunc = func(filter input.OrderFilterInput) ([]entity.Order, error) {
 			return []entity.Order{
-				{ID: 1, TotalAmount: 50, CustomerID: 1},
-				{ID: 2, TotalAmount: 100, CustomerID: 1},
-				{ID: 3, TotalAmount: 1000, CustomerID: 1},
+				{ID: 1, TotalAmount: 50, CustomerID: &id},
+				{ID: 2, TotalAmount: 100, CustomerID: &id},
+				{ID: 3, TotalAmount: 1000, CustomerID: &id},
 			}, nil
 		}
 		productRepo := mock.NewProductRepositoryMock()
@@ -181,25 +186,26 @@ func TestListOrders(t *testing.T) {
 	})
 
 	t.Run("should return list of orders successfully applying disscount", func(t *testing.T) {
+		var id int = 1
 		expected := []entity.Order{
-			{ID: 1, TotalAmount: 47.5, CustomerID: 1},
-			{ID: 2, TotalAmount: 95.0, CustomerID: 1},
-			{ID: 3, TotalAmount: 950.0, CustomerID: 1},
+			{ID: 1, TotalAmount: 47.5, CustomerID: &id},
+			{ID: 2, TotalAmount: 95.0, CustomerID: &id},
+			{ID: 3, TotalAmount: 950.0, CustomerID: &id},
 		}
 
 		orderRepo := mock.NewOrderRepositoryMock()
 		orderRepo.ListOrdersFunc = func(filter input.OrderFilterInput) ([]entity.Order, error) {
 			return []entity.Order{
-				{ID: 1, TotalAmount: 50, CustomerID: 1},
-				{ID: 2, TotalAmount: 100, CustomerID: 1},
-				{ID: 3, TotalAmount: 1000, CustomerID: 1},
+				{ID: 1, TotalAmount: 50, CustomerID: &id},
+				{ID: 2, TotalAmount: 100, CustomerID: &id},
+				{ID: 3, TotalAmount: 1000, CustomerID: &id},
 			}, nil
 		}
 		productRepo := mock.NewProductRepositoryMock()
 
 		uc := usecase.NewOrderUseCase(orderRepo, productRepo)
 
-		id := 1
+		id = 1
 		result, err := uc.ListOrders(input.OrderFilterInput{CustomerID: &id})
 
 		assert.NoError(t, err)
@@ -207,9 +213,10 @@ func TestListOrders(t *testing.T) {
 	})
 
 	t.Run("should return list of orders successfully", func(t *testing.T) {
+		var id int = 10
 		expected := []entity.Order{
-			{ID: 1, Status: "PAYMENT_PENDING", CustomerID: 10},
-			{ID: 2, Status: "COMPLETED", CustomerID: 10},
+			{ID: 1, Status: "PAYMENT_PENDING", CustomerID: &id},
+			{ID: 2, Status: "COMPLETED", CustomerID: &id},
 		}
 
 		orderRepo := mock.NewOrderRepositoryMock()

@@ -114,5 +114,5 @@ func TestIdentifyCustomer_NotFound(t *testing.T) {
 	err := handler.IdentifyCustomer(c)
 
 	assert.NoError(t, err)
-	assert.Equal(t, http.StatusNoContent, rec.Code)
+	assert.Equal(t, http.StatusNotFound, rec.Code)
 }

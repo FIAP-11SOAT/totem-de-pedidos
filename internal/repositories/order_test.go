@@ -63,7 +63,7 @@ func TestCreateOrder(t *testing.T) {
 
 		// order input
 		order := entity.Order{
-			CustomerID:           customerID,
+			CustomerID:           &customerID,
 			Status:               "PENDING",
 			TotalAmount:          50.00,
 			NotificationAttempts: 0,
@@ -97,7 +97,7 @@ func TestCreateOrder(t *testing.T) {
 
 		// order input
 		order := entity.Order{
-			CustomerID:  customerID,
+			CustomerID:  &customerID,
 			Status:      "PENDING",
 			TotalAmount: 30.00,
 			Items: []entity.OrderItem{
@@ -216,7 +216,7 @@ func TestGetOrderByID(t *testing.T) {
 			NotificationAttempts: 0,
 			Status:               "PENDING",
 			TotalAmount:          31.00,
-			CustomerID:           customerID,
+			CustomerID:           &customerID,
 		})
 		assert.NoError(t, err)
 
@@ -231,7 +231,7 @@ func TestGetOrderByID(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, orderId, order.ID)
 		assert.Equal(t, "PENDING", string(order.Status))
-		assert.Equal(t, customerID, order.CustomerID)
+		assert.Equal(t, &customerID, order.CustomerID)
 		assert.Len(t, order.Items, 1)
 		assert.Equal(t, productID, order.Items[0].ProductID)
 		assert.Equal(t, 2, order.Items[0].Quantity)
