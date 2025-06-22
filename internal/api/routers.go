@@ -1,7 +1,7 @@
 package api
 
 import (
-	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
+	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/routers"
 	"github.com/labstack/echo/v4"
 )

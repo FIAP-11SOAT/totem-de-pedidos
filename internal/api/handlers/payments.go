@@ -7,7 +7,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/services/mercadopago"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/dto"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/mapper"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/usecase"

@@ -4,10 +4,10 @@ import (
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/services/payment"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/usecase"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repository"
+	repositories "github.com/FIAP-11SOAT/totem-de-pedidos/internal/repository"
 	"github.com/labstack/echo/v4"
 
-	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
+	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/handlers"
 )
 

@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/services/mercadopago"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/output"

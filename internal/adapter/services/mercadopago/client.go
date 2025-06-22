@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago/request"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago/response"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/services/mercadopago/request"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/services/mercadopago/response"
 )
 
 var client = &http.Client{}

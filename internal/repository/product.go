@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
+	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/repositories"

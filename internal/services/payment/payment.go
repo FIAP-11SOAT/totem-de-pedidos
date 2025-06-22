@@ -4,9 +4,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago/request"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/qrcode"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/services/mercadopago"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/services/mercadopago/request"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/services/qrcode"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/output"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/service"
