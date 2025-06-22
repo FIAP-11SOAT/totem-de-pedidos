@@ -7,7 +7,7 @@ import (
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories/mock"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repository/mock"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/usecase"
 	"github.com/stretchr/testify/assert"
 )
