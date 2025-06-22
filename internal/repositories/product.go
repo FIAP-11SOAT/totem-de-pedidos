@@ -8,9 +8,9 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/domain/entity"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/repositories"
 )
 
 type productRepository struct {
@@ -176,10 +176,6 @@ func (p *productRepository) GetProductsByCategoryID(ctx context.Context, categor
 	}
 
 	return products, nil
-}
-
-func createProductQuery() string {
-	return `INSERT....RETURNING id`
 }
 
 func (p *productRepository) GetCategoryByName(ctx context.Context, categoryName string) (*entity.ProductCategory, error) {

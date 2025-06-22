@@ -8,9 +8,9 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/mapper"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/usecase"
 )
 
 type OrderHanlder struct {

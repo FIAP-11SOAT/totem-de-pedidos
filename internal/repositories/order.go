@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/repositories"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/repositories"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/domain/entity"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
 )
 
 const (

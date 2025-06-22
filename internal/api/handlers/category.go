@@ -5,11 +5,11 @@ import (
 	"strconv"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
-	service "github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/usecase"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/domain/entity"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/usecase"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories"
+	service "github.com/FIAP-11SOAT/totem-de-pedidos/internal/usecase"
 	"github.com/labstack/echo/v4"
 )
 

@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/domain/entity"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/pkg/tests"
 	"github.com/jackc/pgx/v5/pgxpool"

@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/usecase"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/services/payment"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/services/payment"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/usecase"
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories"
 	"github.com/labstack/echo/v4"
