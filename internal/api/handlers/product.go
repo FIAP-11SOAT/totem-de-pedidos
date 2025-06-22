@@ -1,12 +1,13 @@
 package handlers
 
 import (
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/output"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
-	"github.com/labstack/echo/v4"
 	"net/http"
+
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/mapper"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/output"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/usecase"
+	"github.com/labstack/echo/v4"
 )
 
 type ProductHandler struct {

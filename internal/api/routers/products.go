@@ -1,10 +1,10 @@
 package routers
 
 import (
-	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
+	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/database"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/handlers"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/usecase"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories"
+	repositories "github.com/FIAP-11SOAT/totem-de-pedidos/internal/repository"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/usecase"
 	"github.com/labstack/echo/v4"
 )
 

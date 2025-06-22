@@ -4,12 +4,12 @@ import (
 	"net/http"
 	"strconv"
 
-	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/database"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
-	service "github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/usecase"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/repositories"
+	dbadapter "github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/database"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/domain/entity"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/usecase"
+	repositories "github.com/FIAP-11SOAT/totem-de-pedidos/internal/repository"
+	service "github.com/FIAP-11SOAT/totem-de-pedidos/internal/usecase"
 	"github.com/labstack/echo/v4"
 )
 

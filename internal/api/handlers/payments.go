@@ -2,14 +2,15 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
+
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapters/services/mercadopago"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/adapter/services/mercadopago"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/dto"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/mapper"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/mapper"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/usecase"
 )
 
 type PaymentHandler struct {

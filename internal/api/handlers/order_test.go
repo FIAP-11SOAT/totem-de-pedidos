@@ -10,9 +10,9 @@ import (
 	"testing"
 
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/api/handlers"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/entity"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/domain/usecase/mock"
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/input"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/domain/entity"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/input"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/usecase/mock"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"

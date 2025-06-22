@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/core/ports/usecase"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/ports/usecase"
 	"github.com/labstack/echo/v4"
 )
 
