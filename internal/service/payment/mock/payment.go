@@ -1,6 +1,6 @@
 package mock
 
-import "github.com/FIAP-11SOAT/totem-de-pedidos/internal/services/payment"
+import "github.com/FIAP-11SOAT/totem-de-pedidos/internal/service/payment"
 
 type PaymentServiceMock struct {
 	PaymentFunc func(payment.PaymentInput) (payment.PaymentOutput, error)

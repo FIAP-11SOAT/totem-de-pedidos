@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/services/payment"
+	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/service/payment"
 	"github.com/FIAP-11SOAT/totem-de-pedidos/internal/usecase"
 
 	repositories "github.com/FIAP-11SOAT/totem-de-pedidos/internal/repository"
